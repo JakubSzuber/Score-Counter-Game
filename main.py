@@ -1,20 +1,25 @@
 import functions as funs
 
 def main():
-    leader_board = []  # TODO here will be successively saved users with their result and place in the table
-    # TODO !: maybe the leader board should be done in the form of a class, not a list!
+    leader_board = {}  # TODO: maybe the leader board should be done in the form of a class or function!
 
     funs.cleaner()
-    funs.start_window()
+    user_chose = funs.start_window()
     funs.cleaner()
-    funs.sing_in_window()
-    match funs.start_window():
+    current_user = funs.sing_in_window()
+
+    match user_chose:
         case 1:
-            funs.exec_quiz()
+            funs.quiz(current_user)
         case 2:
-            funs.ball_game()
+            funs.number_guessing()
         case 3:
-            funs.applications()
+            funs.card_game()
+        case 4:
+            funs.memory_game()
+
+    funs.saver(current_user, leader_board)
+    #funs.end_window()
 
 
 if __name__ == '__main__':
