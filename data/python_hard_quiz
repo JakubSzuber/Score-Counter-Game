@@ -1,0 +1,12 @@
+What is the correct syntax to output the type of a variable or object in Python?
+a) print(typeof(x))
+b) print(type(x))
+c) print(typeOf(x))
+d) print(typeof x)
+b
+Which method can be used to remove any whitespace from both the beginning and the end of a string??
+a) strip()
+b) trim()
+c) len()
+d) ptrim()
+a
