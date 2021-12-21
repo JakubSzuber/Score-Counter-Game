@@ -1,7 +1,8 @@
-import itertools as itert
 from time import sleep
+import math
 
 from users import User
+
 
 # Different windows:
 def start_window():
@@ -33,7 +34,7 @@ def end_window(user_class):
 
 
 def pause_menu_window():  # TODO to create this window is required npyscreen (a Python curses wrapper)
-    print(10*'-', 'Pause menu', 10*'-',)
+    print(10*'-', 'Pause menu', 10*'-')
     print('Enter 1 to see how much time have you playing')
     print('Enter 2 to see how much points have you scored')
     print('Enter 3 to end game')
@@ -46,41 +47,30 @@ def quiz(user_class):
     print('We starting quiz!')
     print('Choose what topic of the quiz you prefer: python or math?')
     quiz_topic = input('Your answer: ')
+
     match user_class.level:
+
         case 'hard':
             print('You chose hard difficulty, you can get 150 points for the right answer!')
             if quiz_topic == 'python':
-                with open(r'C:\Users\jszub\PycharmProjects\Score-Counter-Game\data\math quiz', 'r') as file:  # Here use absolute path of the file where you have file with content of teh quiz
-                    while True:
-                        correct_answer = itert.count(6, 6)
-
-                        question_line = itert.count(1, 7)
-                        print(file.readline(next(question_line)))
-
-                        for i in range(4):
-                            print(file.readline(next(get_posibibites(1))))
-
-                        user_answer_to_question = input('Your answer: ')
-                        if user_answer_to_question == file.readline(next(correct_answer)):
-                            print('Good answer! You scored 150 points!')
-                            user_class(150)
-                            sleep(2)
-                        else:
-                            print('Bad answer!')
-                            continue
-
-            elif quiz_topic == 'math':
-                pass
+                print('Your answer shulod be correct to examplepattern: a')
+                with open(r'C:\Users\jszub\PycharmProjects\Score-Counter-Game\data\python_hard_quiz', 'r') as file:  # Here use absolute path of the file where you have file with content of teh quiz
+                    quiz_body(user_class, file, 'python')
             else:
-                print('Incorrect value')
+                print('Your answer shulod be correct to examplepattern: 2')
+                with open(r'C:\Users\jszub\PycharmProjects\Score-Counter-Game\data\math_hard_quiz', 'r') as file:
+                    quiz_body(user_class, file, 'math')
+
         case 'easy':
             print('You chose easy difficulty, you can get 100 points for the right answer!')
             if quiz_topic == 'python':
-                pass
-            elif quiz_topic == 'math':
-                pass
+                print('Your answer shulod be correct to examplepattern: a')
+                with open(r'C:\Users\jszub\PycharmProjects\Score-Counter-Game\data\python_easy_quiz', 'r') as file:
+                    quiz_body(user_class, file, 'python')
             else:
-                print('Incorrect value')
+                print('Your answer shulod be correct to examplepattern: 2')
+                with open(r'C:\Users\jszub\PycharmProjects\Score-Counter-Game\data\math_easy_quiz', 'r') as file:
+                    quiz_body(user_class, file, 'math')
 
 
 def number_guessing():
@@ -108,7 +98,23 @@ def saver(user_class, board):
     board[user_class.nick] = user_class.points
 
 
-def get_posibibites(num):
-    for i in range(4):
-        num += 1
-        yield num
+def quiz_body(us_cl, f, quiz_type):
+    counter = 0
+    for line in f:
+        counter += 1
+
+        if counter % 6 == 0:
+            if quiz_type == 'math':
+                correct_ans = eval(line.rstrip())
+            else:
+                correct_ans = line.rstrip()
+
+            user_answer = int(input('Your answer: '))
+            if user_answer == correct_ans:
+                print('Good answer, you\'re getting points!')
+                us_cl(150)  # Use mothod call in class User (add points to object)
+                sleep(2)
+            else:
+                print('Bad answer!')
+        else:
+            print(line.rstrip())
