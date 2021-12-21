@@ -1,0 +1,7 @@
+What is 3 to the 3th power?
+a) 9
+b) 27
+c) 6
+d) 333
+math.pow(3, 3)
+
