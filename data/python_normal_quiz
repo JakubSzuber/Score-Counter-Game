@@ -1,0 +1,54 @@
+What is the correct syntax to output the type of a variable or object in Python?
+a) print(typeof(x))
+b) print(type(x))
+c) print(typeOf(x))
+d) print(typeof x)
+b
+Which method can be used to remove any whitespace from both the beginning and the end of a string?
+a) strip()
+b) trim()
+c) len()
+d) ptrim()
+a
+What does all()?
+a) returns all values in an object which is bigger than parameter given as second argument of all()
+b) returns True if all objects aren't empty otherwise returns False
+c) returns Cartesian Product
+d) returns True if all elements in object are true or object is empty otherwise returns False
+d
+What do partial() and form which module we can use it?
+a) allow to slice some values from the object, it function from itertools module
+b) allow to create clon of the function but with definied argument/arguments, it function from contextlib module
+c) allow to create clon of the function but with definied argument/arguments, it function from functools module
+d) allow to use cache memory, it function from lru_cache module
+c
+Is the notation 1_000_000 correct in python?
+a) Only with use special module
+b) Yes
+c) No
+d) Only in names of the variables, functions, etc.
+b
+What return this line of code: print(3.0 == 3)
+a) True
+b) False
+c) -1
+d) Error
+a
+Choose answer whuch contains only mutable objects?
+a) list, set, tuple
+b) list, tuple, dictionary
+c) list, set, string
+d) list, set, dictionary
+d
+From which in the class queue, the inherited class inherits its attributes?
+a) An inherited class does not inherit its attributes
+b) From the last in queue
+c) From every class but attributes which the same name is inherited from the last one
+d) From the first in queue
+c
+In what is the name of the module that allows sending e-mails from python?
+a) smtplib
+b) mailib
+c) sendmailibrary
+d) maillibibrary
+a

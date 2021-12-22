@@ -1,0 +1,60 @@
+Choose correct answer with all ways of use context manager:
+a) defualt (standard library),
+b) defualt (standard library), class with method enter and exit
+c) defualt (standard library), function with decorator from contextlib (contextmanager)
+d) defualt (standard library), class with method enter and exit, function with decorator from contextlib (contextmanager)
+d
+What function allows to go to the method from the next parent in the queue belonging to the hereditary class?
+a) inherit()
+b) super()
+c) next()
+d) another()
+b
+How many main ways do we have to format strings in the latest versions of python? ?
+a) Only 1
+b) 3
+c) 4
+d) 2
+c
+How can we display the name of a  function in a program?
+a) Use function.__name__
+b) We can't do that
+c) nameof(function)
+d) name(function)
+a
+How many default arguments has print() without counting the display object?
+a) 1
+b) 4
+c) 2
+d) It doesn't have any additional arguments
+b
+Which module can enable the dynamic addition of a function to a class as its method?
+a) types
+b) methodtypes
+c) functools
+d) requests
+a
+What method in the class makes possibility a class to be an iterator?
+a) __iter__
+b) __getitem__
+c) __next__
+d) __str__
+c
+What does itertools.compress()?
+a) returns iterator which is created on the base of two objects (one with values of type bool)
+b) returns generator which is created on the base of two objects (one with values of type bool)
+c) returns compressed object (based on the given condition)
+d) reduces amount of the values in the object (removes duplicate values)
+a
+What does method __iadd__?
+a) stores given values (eg. to calculate it later)
+b) connects attributes of two different instances
+c) adds to instance attribute
+d) adds to instance method
+a
+In which year was python created?
+a) 1991
+b) 1990
+c) 1998
+d) 1997
+a

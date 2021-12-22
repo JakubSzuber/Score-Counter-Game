@@ -1,0 +1,54 @@
+What do the first six digits of pi look like?
+a) 3.14519
+b) 3.14159
+c) 3.14459
+d) 3.14158
+round(math.pi, 5)
+How much equals pi divided into 2 radians?
+a) 2.(3)
+b) 180
+c) 90
+d) 1,5
+math.pi/math.radians(2)
+How many degrees are equal to 2 times pi?
+a) 360
+b) 45
+c) 90
+d) 6,3
+math.degrees(2*math.pi)
+What do the first five digits of e look like?
+a) 7.22
+b) 2.2182
+c) 2.72
+d) 2.77
+round(math.e, 5)-0.00008)
+What is the surface of the trapezoid with the bases: 19, 8 and height 3?
+a) 36
+b) 26
+c) 81
+d) 40.5
+(((19+8)*3)/2)
+How much equals sum of the these values: 0.57, 0.94, 0.60, 0.66
+a) 2.55
+b) 2.5
+c) 2.77
+d) 2.4
+sum(list_floats:=[0.57, 0.94, 0.60, 0.66])
+How much equals (((7*3+4*2)+4*3)/4/3)?
+a) 31
+b) 4.42
+c) 3
+d) 3.41(6)
+(((7*3+4*2)+4*3)/4/3)
+How much equals logarithm base 2744 of 14?
+a) 3
+b) 2
+c) 4
+d) 5
+math.log(2744, 14)
+How much equals 2 to the 11th power?
+a) 1024
+b) 2048
+c) 512
+d) 4096
+math.pow(2, 11)
