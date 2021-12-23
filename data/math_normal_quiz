@@ -8,7 +8,7 @@ How much equals logarithm base 2 of 8?
 a) 4
 b) 2
 c) 3
-d) 0.(3)
+d) 0.3
 math.log(8, 2)
 How much equals square of 625?
 a) 125
@@ -37,12 +37,12 @@ round(math.e, 3)-0.008
 What is the nearest intiger smaller than 984.72?
 a) 983
 b) 984.71
-c) 984.7(1)
+c) 984.71
 d) 984
 math.floor(984.72)
 What is the nearest intiger bigger than 8.917264?
 a) 9
-b) 8.(9)
+b) 8.9
 c) 8
 d)
 math.ceil(8.917264)
@@ -50,7 +50,7 @@ What is the surface of the trapezoid with the bases: 9, 6 and height 3?
 a) 2.5
 b) 3
 c) 18
-d) 22,5
+d) 22.5
 (((9+6)*3)/2)
 How much equals sum of the these values: 0.5, 0.9, 0.67, 0.48
 a) 2.55
