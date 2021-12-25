@@ -1,3 +1,4 @@
+import itertools
 from time import sleep
 import math
 import random
@@ -87,7 +88,7 @@ def quiz(user_class):
 
 
 def number_guessing(user_class):
-    print(painter('-------We can start number giessing game now!-------', g=255, b=100))
+    print(painter('-------We can start number guessing game now!-------', g=255, b=100))
     print(painter('Below rules of the game:', 255))
     print(painter('-You will choose range of the number to quess one number from this range', 255))
     print(painter('-The lowest possible number is 0', 255))
@@ -162,14 +163,48 @@ def memory_game(user_class):
 
         iterator *= 10
 
-    # TODO moze daj tez zasady tutaj
-    colors = {}
-    all_digits = string.digits
-    all_char = string.ascii_letters
+    # TODO add here roles of the game
+    colors = ['red', 'green', 'blue', 'pink']
+    chars_num = list(itertools.chain(string.digits, string.ascii_letters))
+    counter = 2
 
     while True:
-        gen_password = []
-        # TODO create random genrated colred password and ask about it color and characters and increasing the length of the password by 1 for each level
+        if counter == 60:
+            print('Incredible score! You\'ve got maximum points form part two!')
+            break
+
+        gen_password = random.sample(chars_num, counter)
+        gen_color = random.choice(colors)
+
+        match gen_color:
+            case 'red':
+                combination = [255, 0, 0]
+            case 'green':
+                combination = [0, 255, 0]
+            case 'blue':
+                combination = [0, 0, 255]
+            case 'pink':
+                combination = [255, 0, 255]
+
+        print(painter(''.join(gen_password), r=combination[0],  g=combination[1], b=combination[2],))
+
+        user_password_answer = input('Enter password: ')
+        if ''.join(gen_password) == user_password_answer:
+            print('Correct answer you\'re getting points!')
+            user_class += 100
+        else:
+            print(painter('Sorry bad answer! Second part of game is over!', 255))
+            break
+
+        user_color_answer = input('Enter the color of teh password: ')
+        if gen_color == user_color_answer:
+            print('Correct answer you\'re getting points!')
+            user_class += 50
+        else:
+            print(painter('Sorry bad answer! Second part of game is over!', 255))
+            break
+
+        counter += 1
 
 
 
