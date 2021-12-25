@@ -131,10 +131,10 @@ def card_game(user_class):
 def memory_game(user_class):
     print(painter('We can start memory game now!', g=255, b=100))
     print(painter('Below rules of the first part of game:', 255))
-    print(painter('-XXX..', 200))  # tODO
-    print(painter('-XXX..', 200))
-    print(painter('-XXX..', 200))
-    print(painter('-XXX..', 200))
+    print(painter('-You will see number for 2 second and then you have to enter it correct', 200))
+    print(painter('-The amount of the digits in the number will be increasing', 200))
+    print(painter('-If you make a mistake the first part of the game will end', 200))
+    print(painter('-You can earn more points from the bigger numbers!', 200))
 
     input('If you\'re ready enter anything: ')
     print('Finally we can start game!')
@@ -165,10 +165,10 @@ def memory_game(user_class):
 
 
     print(painter('Below rules of the second part of game:', 255))
-    print(painter('-XXX..', 200))  # tODO
-    print(painter('-XXX..', 200))
-    print(painter('-XXX..', 200))
-    print(painter('-XXX..', 200))
+    print(painter('-You will se random password in the random color for 2 seconds, after that you have to enter it and its color', 200))
+    print(painter('-The length of the password will be increasing', 200))
+    print(painter('-For guessing the password correctly you get 100 points for guessing the color 50', 200))
+    print(painter('-If you make a mistake the game will end', 200))
 
     input('If you\'re ready enter anything: ')
     print('Finally we can start game!')
