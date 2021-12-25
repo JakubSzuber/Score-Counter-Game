@@ -130,13 +130,13 @@ def card_game(user_class):
 
 def memory_game(user_class):
     print(painter('We can start memory game now!', g=255, b=100))
-    print(painter('Below rules of the game:', 255))
+    print(painter('Below rules of the first part of game:', 255))
     print(painter('-XXX..', 200))  # tODO
     print(painter('-XXX..', 200))
     print(painter('-XXX..', 200))
     print(painter('-XXX..', 200))
 
-    user_readiness = input('If you\'re ready enter yes: ')
+    input('If you\'re ready enter anything: ')
     print('Finally we can start game!')
     sleep(2)
     cleaner()
@@ -163,7 +163,18 @@ def memory_game(user_class):
 
         iterator *= 10
 
-    # TODO add here roles of the game
+
+    print(painter('Below rules of the second part of game:', 255))
+    print(painter('-XXX..', 200))  # tODO
+    print(painter('-XXX..', 200))
+    print(painter('-XXX..', 200))
+    print(painter('-XXX..', 200))
+
+    input('If you\'re ready enter anything: ')
+    print('Finally we can start game!')
+    sleep(2)
+    cleaner()
+
     colors = ['red', 'green', 'blue', 'pink']
     chars_num = list(itertools.chain(string.digits, string.ascii_letters))
     counter = 2
@@ -182,15 +193,17 @@ def memory_game(user_class):
             case 'green':
                 combination = [0, 255, 0]
             case 'blue':
-                combination = [0, 0, 255]
+                combination = [0, 50, 200]
             case 'pink':
                 combination = [255, 0, 255]
 
         print(painter(''.join(gen_password), r=combination[0],  g=combination[1], b=combination[2],))
+        sleep(3)
+        cleaner()
 
         user_password_answer = input('Enter password: ')
         if ''.join(gen_password) == user_password_answer:
-            print('Correct answer you\'re getting points!')
+            print(painter('Correct answer you\'re getting points!', g=255))
             user_class += 100
         else:
             print(painter('Sorry bad answer! Second part of game is over!', 255))
@@ -198,11 +211,14 @@ def memory_game(user_class):
 
         user_color_answer = input('Enter the color of teh password: ')
         if gen_color == user_color_answer:
-            print('Correct answer you\'re getting points!')
+            print(painter('Correct answer you\'re getting points!', g=255))
+            sleep(2)
             user_class += 50
         else:
             print(painter('Sorry bad answer! Second part of game is over!', 255))
             break
+
+        cleaner()
 
         counter += 1
 
