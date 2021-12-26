@@ -14,7 +14,7 @@ def main():
         case 2:
             funs.number_guessing(current_user)
         case 3:
-            funs.card_game(current_user)
+            funs.russian_schnapsen_game(current_user)
         case 4:
             funs.memory_game(current_user)
 
