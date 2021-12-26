@@ -1,10 +1,12 @@
 import itertools
+from functools import lru_cache
 from time import sleep
 import math
 import random
 import string
 
 from users import User
+from player import Player
 
 
 # Different windows:
@@ -16,7 +18,7 @@ def start_window():
     print('Choose one option:')
     print('Enter 1 - to start one of the quizzes.')
     print('Enter 2 - to start number guessing game.')
-    print('Enter 3 - to start card game.')
+    print('Enter 3 - to start russian schnapsen game.')
     print('Enter 4 - to start memory game.')
     #print('Enter 0 to open pause menu.')
     print('-'*20)
@@ -123,9 +125,38 @@ def number_guessing(user_class):
         print(painter(f'You earned {earned_points} points', g=255))
 
 
-def card_game(user_class):
-    print('We\'re starting card game')
-    pass  # TODO whole body of the applications
+def russian_schnapsen_game(user_class):
+    print(painter('-------We can start card game now!-------', g=255, b=100))
+    print(painter('Below rules of the game:', 255))
+    print(painter('-', 255))
+    print(painter('-', 255))
+    print(painter('-', 255))
+    print(painter('-', 255))
+    print(painter('-!\n', 255))
+
+    choosen_range = input('If you ready enter anything: ')
+    print('Finally we can start game!')
+    sleep(2)
+    cleaner()
+
+    suit = ['heart', 'tile', 'clover', 'piker']
+    figures = ['9', '10', 'jack', 'queen', 'king', 'ace']
+
+    dict_all_cards = {}
+    all_cards_list = []
+
+    for s in suit:
+        power = (i for i in range(9, 15))
+        for f in figures:
+            dict_all_cards[(s, f)] = next(power)
+
+    for i in dict_all_cards:
+        all_cards_list.append({i: dict_all_cards[i]})
+
+    random.shuffle(all_cards_list)
+
+    player_01 = Player.player_creator(suit, figures, user_class.nick, user_class.level)[0]
+    player_02 = Player.player_creator(suit, figures, user_class.nick, user_class.level)[1]
 
 
 def memory_game(user_class):
@@ -233,6 +264,7 @@ def saver(user_class, board):
     board[user_class.nick] = user_class.points
 
 
+@lru_cache
 def quiz_body(us_cl, f, quiz_type):
     cleaner()
     counter = 0
