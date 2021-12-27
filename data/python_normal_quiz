@@ -28,7 +28,7 @@ b) Yes
 c) No
 d) Only in names of the variables, functions, etc.
 b
-What return this line of code: print(3.0 == 3)
+What return this line of code: print(3.0 == 3)?
 a) True
 b) False
 c) -1
@@ -52,3 +52,9 @@ b) mailib
 c) sendmailibrary
 d) maillibibrary
 a
+Which character can be an Identifier among them in Python?
+a) @
+b) _
+c) 1
+d) $
+b
