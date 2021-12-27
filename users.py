@@ -13,7 +13,3 @@ class User:
 
     def __str__(self):
         print(f'User {self.nick} for now have: {self.points} points')
-
-    @staticmethod
-    def todo():
-        pass
