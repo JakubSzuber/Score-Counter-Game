@@ -125,16 +125,16 @@ def number_guessing(user_class):
         print(painter(f'You earned {earned_points} points', g=255))
 
 
-def russian_schnapsen_game(user_class):
+def russian_schnapsen_game(user_class):  # TODO remember when you will be creating leader bord meybe one user should have counted points from two classes
     print(painter('-------We can start card game now!-------', g=255, b=100))
     print(painter('Below rules of the game:', 255))
-    print(painter('-', 255))
-    print(painter('-', 255))
-    print(painter('-', 255))
-    print(painter('-', 255))
-    print(painter('-!\n', 255))
+    print(painter('-You will play against computer', 255))
+    print(painter('-Game is absolutely random', 255))
+    print(painter('-You have 12 cards in your deck', 255))
+    print(painter('-If your card have bigger value than your rival\'s card you earn sum of points from both cards in a turn', 255))
+    print(painter('-If you have king and queen from one fit you can get up to 100 points!\n', 255))
 
-    choosen_range = input('If you ready enter anything: ')
+    input('If you ready enter anything: ')
     print('Finally we can start game!')
     sleep(2)
     cleaner()
@@ -142,21 +142,50 @@ def russian_schnapsen_game(user_class):
     suit = ['heart', 'tile', 'clover', 'piker']
     figures = ['9', '10', 'jack', 'queen', 'king', 'ace']
 
-    dict_all_cards = {}
-    all_cards_list = []
+    deck_parts = Player.player_creator(suit, figures, user_class.nick, user_class.level)
+    player_01 = deck_parts[0]
+    player_02 = deck_parts[1]
 
-    for s in suit:
-        power = (i for i in range(9, 15))
-        for f in figures:
-            dict_all_cards[(s, f)] = next(power)
+    player_02.nick = 'Computer'
 
-    for i in dict_all_cards:
-        all_cards_list.append({i: dict_all_cards[i]})
+    player_01.report_marriage()
+    player_02.report_marriage()
 
-    random.shuffle(all_cards_list)
+    player_01_cards = player_01.card_generator()
+    player_02_cards = player_02.card_generator()
 
-    player_01 = Player.player_creator(suit, figures, user_class.nick, user_class.level)[0]
-    player_02 = Player.player_creator(suit, figures, user_class.nick, user_class.level)[1]
+    while True:
+        try:
+            card_1 = next(player_01_cards)
+            card_2 = next(player_02_cards)
+
+            print(f'{user_class.nick} card: {card_1}')
+            print(f'Computer card: {card_2}')
+
+            card_1_power = list(card_1.values())[0]
+            card_2_power = list(card_2.values())[0]
+
+            if card_1_power > card_2_power:
+                print(painter(f'{user_class.nick} is winning this turn!', g=255))
+                player_01 += card_1_power+card_2_power
+                sleep(2)
+                cleaner()
+            elif card_1_power == card_2_power:
+                print('Draw!')
+                sleep(2)
+                cleaner()
+            else:
+                print(painter(f'Computer\'s winning this turn!', 255))
+                player_02 += card_1_power + card_2_power
+                sleep(2)
+                cleaner()
+        except StopIteration:
+            print(f'{player_01.nick}, you\'ve earn {player_01.points} points')
+            print(f'Computer, earn {player_02.points} points')
+            print(f'Winner is: {player_01.nick}!' if player_01.points > player_02.points else f'Winner is: computer!')
+            print('Computer: ', end='')
+            player_02.ending()
+            break
 
 
 def memory_game(user_class):
