@@ -1,59 +1,59 @@
-import itertools
+from itertools import chain
 from functools import lru_cache
 from time import sleep
 import math
-import random
-import string
+from random import (sample, choice, randint)
+from string import (digits, ascii_letters)
 
 from users import User
 from player import Player
 
 
-# Different windows:
+# General functions:
 def start_window():
     print('Hello user!')
-    print('You can choose one of several options, where to start completing tasks and collecting points. Good luck!')
+    print('You will be playing in few games, where you can completing tasks and collecting points. \nWhen you end all four minigames you could see leader board and start playing anew. Good luck!')
     sleep(4)
     cleaner()
-    print('Choose one option:')
-    print('Enter 1 - to start one of the quizzes.')
-    print('Enter 2 - to start number guessing game.')
-    print('Enter 3 - to start russian schnapsen game.')
-    print('Enter 4 - to start memory game.')
-    #print('Enter 0 to open pause menu.')
+    print('Here is the list of games that you will play sequentially:')
+    print('1 - quizzes about path or python.')
+    print('2 - number guessing game.')
+    print('3 - russian schnapsen game (card game).')
+    print('4 - color-number memory game.')
+    #print('Enter 0 to open pause menu.')  # TODO to create this window is required npyscreen (a Python curses wrapper)
     print('-'*20)
-    user_selection = int(input('\tYour answer: '))
-    return user_selection
+    input('If you ready enter anything: ')
 
 
-def sing_in_window(user_sel):
+def sing_in_window():
     print('Before we start enter data:')
     user_nick = input('Your nick: ')
-    if user_sel == 1:
-        print('\nChose eventualy level of difficult:\n-normal\n-medium')
-        diff_level = input('Your answer: ')
-        curr_us = User(user_nick, diff_level)
-    else:
-        curr_us = User(user_nick)
+
+    print('\nChose level of difficult in quiz:\n-normal\n-medium')
+    diff_level = input('Your answer: ')
+
+    curr_us = User(user_nick, diff_level)
     cleaner()
     return curr_us
 
 
-def end_window(user_class):
-    print(painter('Congratulations {user_class.nick}!', g=255, b=100))
-    print(painter(f'You overall scored: {user_class.points}', g=255, b=100))
+def end_window_1(user_class):
+    print(painter(f'Congratulations {user_class.nick}!', g=255, b=100))
+    print(user_class)
 
 
-def pause_menu_window():  # TODO to create this window is required npyscreen (a Python curses wrapper)
+'''
+def pause_menu_window():
     print(10*'-', 'Pause menu', 10*'-')
     print(painter('Enter 1 to see how much time have you playing', 192, 192, 192))
     print(painter('Enter 2 to see how much points have you scored', 192, 192, 192))
     print(painter('Enter 3 to end game', 192, 192, 192))
     print(painter('-'*20, 192, 192, 192))
+'''  # TODO to create this window is required npyscreen (a Python curses wrapper)
 
 
 
-# Sub-applications:
+# Minigames applications:
 def quiz(user_class):
     print(painter('-------We can start quiz now!-------', g=255, b=100))
     print('Choose what topic of the quiz you prefer: python or math?')
@@ -103,7 +103,7 @@ def number_guessing(user_class):
     sleep(2)
     cleaner()
 
-    drawn_num = random.randint(0, choosen_range)
+    drawn_num = randint(0, choosen_range)
     counter = 0
 
     user_trial = int(input('Guess number: '))
@@ -121,11 +121,12 @@ def number_guessing(user_class):
     else:
         earned_points = choosen_range//counter
         user_class += earned_points
+        user_class.num_guess_points += earned_points
         print(painter(f'Gangratulations {user_class.nick}, you quess correct after {counter} times!', g=255))
         print(painter(f'You earned {earned_points} points', g=255))
 
 
-def russian_schnapsen_game(user_class):  # TODO remember when you will be creating leader bord meybe one user should have counted points from two classes
+def russian_schnapsen_game(user_class):
     print(painter('-------We can start card game now!-------', g=255, b=100))
     print(painter('Below rules of the game:', 255))
     print(painter('-You will play against computer', 255))
@@ -167,7 +168,8 @@ def russian_schnapsen_game(user_class):  # TODO remember when you will be creati
 
             if card_1_power > card_2_power:
                 print(painter(f'{user_class.nick} is winning this turn!', g=255))
-                player_01 += card_1_power+card_2_power
+                user_class += card_1_power+card_2_power
+                user_class.card_points += card_1_power+card_2_power
                 sleep(2)
                 cleaner()
             elif card_1_power == card_2_power:
@@ -176,7 +178,8 @@ def russian_schnapsen_game(user_class):  # TODO remember when you will be creati
                 cleaner()
             else:
                 print(painter(f'Computer\'s winning this turn!', 255))
-                player_02 += card_1_power + card_2_power
+                user_class += card_1_power + card_2_power
+                user_class.card_points += card_1_power + card_2_power
                 sleep(2)
                 cleaner()
         except StopIteration:
@@ -203,7 +206,7 @@ def memory_game(user_class):
 
     iterator = 100
     while True:
-        print('Number:', secret_num := random.randint(iterator, iterator*2))
+        print('Number:', secret_num := randint(iterator, iterator*2))
         sleep(3)
         cleaner()
 
@@ -212,6 +215,7 @@ def memory_game(user_class):
         if users_trial == secret_num:
             print(painter(f'Correct answer! You get {iterator//20} points!', g=255))
             user_class += iterator//20
+            user_class.card_poinst += iterator//20
             sleep(2)
             cleaner()
         else:
@@ -236,7 +240,7 @@ def memory_game(user_class):
     cleaner()
 
     colors = ['red', 'green', 'blue', 'pink']
-    chars_num = list(itertools.chain(string.digits, string.ascii_letters))
+    chars_num = list(chain(digits, ascii_letters))
     counter = 2
 
     while True:
@@ -244,8 +248,8 @@ def memory_game(user_class):
             print('Incredible score! You\'ve got maximum points form part two!')
             break
 
-        gen_password = random.sample(chars_num, counter)
-        gen_color = random.choice(colors)
+        gen_password = sample(chars_num, counter)
+        gen_color = choice(colors)
 
         match gen_color:
             case 'red':
@@ -265,6 +269,7 @@ def memory_game(user_class):
         if ''.join(gen_password) == user_password_answer:
             print(painter('Correct answer you\'re getting points!', g=255))
             user_class += 100
+            user_class.memory_points += 100
         else:
             print(painter('Sorry bad answer! Second part of game is over!', 255))
             break
@@ -274,6 +279,7 @@ def memory_game(user_class):
             print(painter('Correct answer you\'re getting points!', g=255))
             sleep(2)
             user_class += 50
+            user_class.memory_points += 50
         else:
             print(painter('Sorry bad answer! Second part of game is over!', 255))
             break
@@ -284,19 +290,16 @@ def memory_game(user_class):
 
 
 
-# Auxiliary functions and temporary functions:
-def cleaner():  # TODO change this function in npyscreen (a Python curses wrapper) in the future
+# Auxiliary functions and temporary function:
+def cleaner():  # TODO change this function into npyscreen (a Python curses wrapper) in the future
     print(20*'\n')
-
-
-def saver(user_class, board):
-    board[user_class.nick] = user_class.points
 
 
 @lru_cache
 def quiz_body(us_cl, f, quiz_type):
     cleaner()
     counter = 0
+    correct_answers = 0
     for line in f:
         counter += 1
 
@@ -307,6 +310,7 @@ def quiz_body(us_cl, f, quiz_type):
                 if float(user_answer) == correct_ans:
                     print('Good answer, you\'re getting points!')
                     us_cl += 150  # Use mothod call in class User (add points to object)
+                    us_cl.quiz_points += 150
                     sleep(2)
                     cleaner()
                 else:
@@ -318,6 +322,8 @@ def quiz_body(us_cl, f, quiz_type):
                 if user_answer == correct_ans:
                     print('Good answer, you\'re getting points!')
                     us_cl += 150  # Use mothod call in class User (add points to object)
+                    us_cl.quiz_points += 150
+                    correct_answers += 1
                     sleep(2)
                     cleaner()
                 else:
@@ -327,7 +333,7 @@ def quiz_body(us_cl, f, quiz_type):
         else:
             print(line.rstrip())
 
-    print(f'Congratulations {us_cl.nick} you finished quiz with score: {us_cl.poins}')  # TODO expand end of the quizz
+    print(f'Congratulations {us_cl.nick} you finished quiz with score {correct_answers}/10, that gives us: {us_cl.quiz_points} points!')
 
 
 def painter(text, r=0, g=0, b=0):
