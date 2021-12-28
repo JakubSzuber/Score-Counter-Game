@@ -190,6 +190,9 @@ def russian_schnapsen_game(user_class):
             player_02.ending()
             break
 
+    user_class.all_points += player_01.all_points
+    user_class.card_points += player_01.all_points
+
 
 def memory_game(user_class):
     print(painter('We can start memory game now!', g=255, b=100))
