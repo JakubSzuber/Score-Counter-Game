@@ -1,25 +1,32 @@
-import functions as funs
+import functions as func
 
 def main():
-    leader_board = {}  # TODO: maybe the leader board should be done in the form of a class or function!
+    leader_board = []
 
-    funs.cleaner()
-    user_chose = funs.start_window()
-    funs.cleaner()
-    current_user = funs.sing_in_window(user_chose)
+    while True:
+        func.cleaner()
+        func.start_window()  # Greeting the user and explain what will user do
+        func.cleaner()
 
-    match user_chose:
-        case 1:
-            funs.quiz(current_user)
-        case 2:
-            funs.number_guessing(current_user)
-        case 3:
-            funs.russian_schnapsen_game(current_user)
-        case 4:
-            funs.memory_game(current_user)
+        current_user = func.sing_in_window()  # Create instance of the class User
 
-    funs.saver(current_user, leader_board)
-    #funs.end_window()
+        # Use the functions responsible for the mini-games one by one
+        func.quiz(current_user)
+        func.number_guessing(current_user)
+        func.russian_schnapsen_game(current_user)
+        func.memory_game(current_user)
+
+        func.end_window_1(current_user)  # Show to user earned point in each game and in the whole app (use a few methods in class User)
+
+        leader_board.append({current_user.nick: current_user.points})  # Add user to leader board
+
+        leader_board_show = input('If you want to see leader board enter "yes" and if you want to start new session enter anything else: ')
+        if leader_board_show == 'yes':
+            # TODO sorted(leader_board)
+            for user in leader_board:
+                print(user)
+        else:
+            continue
 
 
 if __name__ == '__main__':
