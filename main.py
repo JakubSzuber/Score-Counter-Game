@@ -18,12 +18,12 @@ def main():
 
         func.end_window_1(current_user)  # Show to user earned point in each game and in the whole app (use a few methods in class User)
 
-        leader_board.append({current_user.nick: current_user.points})  # Add user to leader board
+        leader_board.append({current_user.nick: current_user.all_points})  # Add user to leader board
 
         leader_board_show = input('If you want to see leader board enter "yes" and if you want to start new session enter anything else: ')
         if leader_board_show == 'yes':
-            # TODO sorted(leader_board)
-            for user in leader_board:
+            leader_board.sort(key=lambda x: list(x.values())[0])
+            for user in list(enumerate(leader_board, start=1)):
                 print(user)
         else:
             continue
