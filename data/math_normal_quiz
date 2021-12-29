@@ -44,7 +44,7 @@ What is the nearest intiger bigger than 8.917264?
 a) 9
 b) 8.9
 c) 8
-d)
+d) 7
 math.ceil(8.917264)
 What is the surface of the trapezoid with the bases: 9, 6 and height 3?
 a) 2.5
@@ -57,4 +57,4 @@ a) 2.55
 b) 2.5
 c) 2
 d) 2.4
-sum(list_floats:=[0.5, 0.9, 0.67, 0.48])
+sum([0.5, 0.9, 0.67, 0.48])
