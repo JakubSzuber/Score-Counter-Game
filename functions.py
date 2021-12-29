@@ -183,9 +183,9 @@ def russian_schnapsen_game(user_class):
                 sleep(2)
                 cleaner()
         except StopIteration:
-            print(f'{player_01.nick}, you\'ve earn {player_01.points} points')
-            print(f'Computer, earn {player_02.points} points')
-            print(f'Winner is: {player_01.nick}!' if player_01.points > player_02.points else f'Winner is: computer!')
+            print(f'{player_01.nick}, you\'ve earn {player_01.card_points} points')
+            print(f'Computer, earn {player_02.card_points} points')
+            print(f'Winner is: {player_01.nick}!' if player_01.card_points > player_02.card_points else f'Winner is: computer!')
             print('Computer: ', end='')
             player_02.ending()
             break
