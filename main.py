@@ -1,5 +1,6 @@
 import functions as func
 
+
 def main():
     leader_board = []
 
@@ -8,7 +9,8 @@ def main():
         func.start_window()  # Greeting the user and explain what will user do
         func.cleaner()
 
-        current_user = func.sing_in_window()  # Create instance of the class User
+        with func.cm_sing_in_window(current_user := func.sing_in_window()):  # Create instance of the class User and use context manager at one time
+            pass
 
         # Use the functions responsible for the mini-games one by one
         func.quiz(current_user)
@@ -16,7 +18,8 @@ def main():
         func.russian_schnapsen_game(current_user)
         func.memory_game(current_user)
 
-        func.end_window_1(current_user)  # Show to user earned point in each game and in the whole app (use a few methods in class User)
+        with func.CmEndWindow(r'C:\Users\jszub\OneDrive\Pulpit\test_cm.txt', 'a', current_user):
+            func.end_window_1(current_user)  # Show to user earned point in each game and in the whole app (use a few methods in class User)
 
         leader_board.append({current_user.nick: current_user.all_points})  # Add user to leader board
 
