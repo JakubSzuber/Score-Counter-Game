@@ -1,12 +1,58 @@
 from itertools import chain
 from functools import lru_cache
 from time import sleep
+from contextlib import contextmanager
+from datetime import datetime
+from time import time
 import math
 from random import (sample, choice, randint)
 from string import (digits, ascii_letters)
-
 from users import User
 from player import Player
+
+
+# Context managers and wrappers:
+@contextmanager
+def cm_sing_in_window(current_user):
+    print('You nick and time of staring playing will be saved into file (and your every activity in this game).')
+    sleep(2)
+    print('Saving, pleas wait...')
+    yield
+    with open(r'C:\Users\jszub\OneDrive\Pulpit\test_cm.txt', 'a') as file:
+        file.write(f'{current_user.nick} started playing at {datetime.now()}\n')
+    print('Saving succesful!')
+    sleep(2)
+    cleaner()
+
+
+class CmEndWindow:
+    def __init__(self, path, method, current_user):
+        self.file_obj = open(path, method)
+        self.current_user = current_user
+
+    def __enter__(self):
+        print('Saving overall score into file, pleas wait...')
+        self.file_obj.write(f'{self.current_user.nick} end with score: {self.current_user.allpoints}\n')
+        print('Saving succesful!')
+        sleep(2)
+
+    def __exit__(self):
+        self.file_obj.close()
+
+
+def minigame_wrapper(game_type):
+    def take_clas(function):
+        def wrapper(*args):
+            with open(r'C:\Users\jszub\OneDrive\Pulpit\test_cm.txt', 'a') as file:
+                file.write(f'User start playing {game_type} at {datetime.now()}\n')
+                start = time()
+                on = function(*args)
+                end = time()
+                file.write(f'User end playing {game_type} at {datetime.now()} (about {round(end-start)} seconds in game)\n')
+            return on
+        return wrapper
+    return take_clas
+
 
 
 # General functions:
@@ -54,6 +100,7 @@ def pause_menu_window():
 
 
 # Minigames applications:
+@minigame_wrapper('quiz')
 def quiz(user_class):
     print(painter('-------We can start quiz now!-------', g=255, b=100))
     print('Choose what topic of the quiz you prefer: python or math?')
@@ -89,6 +136,7 @@ def quiz(user_class):
                     quiz_body(user_class, file, 'math')
 
 
+@minigame_wrapper('number guessing')
 def number_guessing(user_class):
     print(painter('-------We can start number guessing game now!-------', g=255, b=100))
     print(painter('Below rules of the game:', 255))
@@ -126,6 +174,7 @@ def number_guessing(user_class):
         print(painter(f'You earned {earned_points} points', g=255))
 
 
+@minigame_wrapper('russian schnapsen game')
 def russian_schnapsen_game(user_class):
     print(painter('-------We can start card game now!-------', g=255, b=100))
     print(painter('Below rules of the game:', 255))
@@ -168,11 +217,15 @@ def russian_schnapsen_game(user_class):
 
             if card_1_power > card_2_power:
                 print(painter(f'{user_class.nick} is winning this turn!', g=255))
+                player_01.all_points += card_1_power+card_2_power
+                player_01.card_points += card_1_power + card_2_power
                 user_class += card_1_power+card_2_power
                 user_class.card_points += card_1_power+card_2_power
                 sleep(2)
                 cleaner()
             elif card_1_power == card_2_power:
+                player_02.all_points += card_1_power+card_2_power
+                player_02.card_points += card_1_power + card_2_power
                 print('Draw!')
                 sleep(2)
                 cleaner()
@@ -194,6 +247,7 @@ def russian_schnapsen_game(user_class):
     user_class.card_points += player_01.all_points
 
 
+@minigame_wrapper('memory game')
 def memory_game(user_class):
     print(painter('We can start memory game now!', g=255, b=100))
     print(painter('Below rules of the first part of game:', 255))
@@ -217,8 +271,8 @@ def memory_game(user_class):
 
         if users_trial == secret_num:
             print(painter(f'Correct answer! You get {iterator//20} points!', g=255))
-            user_class += iterator//20
-            user_class.card_poinst += iterator//20
+            user_class.all_points += iterator//20
+            user_class.memory_points += iterator//20
             sleep(2)
             cleaner()
         else:
@@ -271,7 +325,7 @@ def memory_game(user_class):
         user_password_answer = input('Enter password: ')
         if ''.join(gen_password) == user_password_answer:
             print(painter('Correct answer you\'re getting points!', g=255))
-            user_class += 100
+            user_class.all_points += 100
             user_class.memory_points += 100
         else:
             print(painter('Sorry bad answer! Second part of game is over!', 255))
@@ -281,14 +335,13 @@ def memory_game(user_class):
         if gen_color == user_color_answer:
             print(painter('Correct answer you\'re getting points!', g=255))
             sleep(2)
-            user_class += 50
+            user_class.all_points += 50
             user_class.memory_points += 50
         else:
             print(painter('Sorry bad answer! Second part of game is over!', 255))
             break
 
         cleaner()
-
         counter += 1
 
 
