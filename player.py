@@ -41,19 +41,19 @@ class Player(User):
         if clover == 2:
             print(f'{self.nick} have clover marriage and getting 60 pomits!\n')
             sleep(2)
-            self.points += 60
+            self.all_points += 60
         if tile == 2:
             print(f'{self.nick} have tile marriage and getting 80 pomits!\n')
             sleep(2)
-            self.points += 80
+            self.all_points += 80
         if heart == 2:
             print(f'{self.nick} have heart marriage and getting 100 pomits!\n')
             sleep(2)
-            self.points += 100
+            self.all_points += 100
         if piker == 2:
             print(f'{self.nick} have piker marriage and getting 40 pomits!\n')
             sleep(2)
-            self.points += 40
+            self.all_points += 40
 
     @classmethod
     def player_creator(cls, suit, figures, nick, level):  # method which create instance
@@ -76,6 +76,3 @@ class Player(User):
         return [player_1, player_2]
 
     ending = staticmethod(lambda: print('Thanks for playing, good game!'))
-
-    # TODO set some attributes to private
-    # TODO create here property (in any way) which print amount of points etc.
