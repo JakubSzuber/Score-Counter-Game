@@ -7,9 +7,8 @@ def main():
     while True:
         func.cleaner()
         func.start_window()  # Greeting the user and explain what will user do
-        func.cleaner()
 
-        with func.cm_sing_in_window(current_user := func.sing_in_window()):  # Create instance of the class User and use context manager at one time
+        with func.cm_sing_in_window(current_user := func.sing_in_window(leader_board)):  # Create instance of the class User and use context manager at one time
             pass
 
         # Use the functions responsible for the mini-games one by one
