@@ -40,6 +40,27 @@ class CmEndWindow:
         self.file_obj.close()
 
 
+def error_handler(func):  # TODO change this name
+    def arguments(*args):
+        while True:
+            try:
+                on = func(*args)
+            except ValueError as e:
+                print('You entered value in wrong type! Details: ', e)
+                sleep(4)
+            except AssertionError as e:
+                print('You entered value in incorrect way! Details: ', e)
+                sleep(4)
+            except Exception as e:  # TODO add more excetions
+                print('Appeared unexpected error, try again. Details: ', e)
+                sleep(4)
+            else:
+                break
+        return on
+    return arguments
+
+
+
 def minigame_wrapper(game_type):
     def take_clas(function):
         def wrapper(*args):
@@ -58,7 +79,8 @@ def minigame_wrapper(game_type):
 # General functions:
 def start_window():
     print('Hello user!')
-    print('You will be playing in few games, where you can completing tasks and collecting points. \nWhen you end all four minigames you could see leader board and start playing anew. Good luck!')
+    print('You will be playing in few games, where you can completing tasks and collecting points. \nWhen you end all four minigames you could see leader board and start playing anew. Good luck!\n')
+    print('PS: Follow the guidelines carefully because if you cause an error you will have to play mini-game from the begining!')
     sleep(4)
     cleaner()
     print('Here is the list of games that you will play sequentially:')
@@ -71,12 +93,17 @@ def start_window():
     input('If you ready enter anything: ')
 
 
-def sing_in_window():
+@error_handler
+def sing_in_window(l_board):
     print('Before we start enter data:')
     user_nick = input('Your nick: ')
 
+    assert user_nick not in l_board
+
     print('\nChose level of difficult in quiz:\n-normal\n-medium')
     diff_level = input('Your answer: ')
+
+    assert diff_level == ('normal' or 'medium')
 
     curr_us = User(user_nick, diff_level)
     cleaner()
@@ -100,6 +127,7 @@ def pause_menu_window():
 
 
 # Minigames applications:
+@error_handler
 @minigame_wrapper('quiz')
 def quiz(user_class):
     print(painter('-------We can start quiz now!-------', g=255, b=100))
@@ -136,6 +164,7 @@ def quiz(user_class):
                     quiz_body(user_class, file, 'math')
 
 
+@error_handler
 @minigame_wrapper('number guessing')
 def number_guessing(user_class):
     print(painter('-------We can start number guessing game now!-------', g=255, b=100))
@@ -174,6 +203,7 @@ def number_guessing(user_class):
         print(painter(f'You earned {earned_points} points', g=255))
 
 
+@error_handler
 @minigame_wrapper('russian schnapsen game')
 def russian_schnapsen_game(user_class):
     print(painter('-------We can start card game now!-------', g=255, b=100))
@@ -247,6 +277,7 @@ def russian_schnapsen_game(user_class):
     user_class.card_points += player_01.all_points
 
 
+@error_handler
 @minigame_wrapper('memory game')
 def memory_game(user_class):
     print(painter('We can start memory game now!', g=255, b=100))
@@ -351,6 +382,7 @@ def cleaner():  # TODO change this function into npyscreen (a Python curses wrap
     print(20*'\n')
 
 
+@error_handler
 @lru_cache
 def quiz_body(us_cl, f, quiz_type):
     cleaner()
