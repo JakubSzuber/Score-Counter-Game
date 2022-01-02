@@ -40,20 +40,32 @@ class CmEndWindow:
         self.file_obj.close()
 
 
-def error_handler(func):  # TODO change this name
+def error_handler(func):
     def arguments(*args):
         while True:
             try:
+                cleaner()
                 on = func(*args)
             except ValueError as e:
-                print('You entered value in wrong type! Details: ', e)
-                sleep(4)
+                print(painter('You entered wrong type of the value!', 250))
+                print('Details:', e)
+                sleep(5)
+            # except StopIteration as e:
+            #     print(painter('Can\'t take next value!', 250))
+            #     print('Details:', e)
+            #     sleep(5)
+            # except KeyError as e:  TODO i don't thing so user can make this error
+            #     print('painter(You entered value in wrong type!'))
+            #     print('Details:', e)
+            #     sleep(5)
             except AssertionError as e:
-                print('You entered value in incorrect way! Details: ', e)
-                sleep(4)
-            except Exception as e:  # TODO add more excetions
-                print('Appeared unexpected error, try again. Details: ', e)
-                sleep(4)
+                print(painter('A logic of the program has broken!', 250))
+                print('Details:', e)
+                sleep(5)
+            except Exception as e:
+                print(painter('Appeared unexpected error!', 250))
+                print('Details:', e)
+                sleep(5)
             else:
                 break
         return on
@@ -89,7 +101,7 @@ def start_window():
     print('3 - russian schnapsen game (card game).')
     print('4 - color-number memory game.')
     #print('Enter 0 to open pause menu.')  # TODO to create this window is required npyscreen (a Python curses wrapper)
-    print('-'*20)
+    print('-'*58)
     input('If you ready enter anything: ')
 
 
@@ -98,12 +110,13 @@ def sing_in_window(l_board):
     print('Before we start enter data:')
     user_nick = input('Your nick: ')
 
-    assert user_nick not in l_board
+    assert user_nick not in l_board, 'User with this nick is already saved in the leader board!'
+    assert user_nick != '', 'Your nick must have characters!'
 
     print('\nChose level of difficult in quiz:\n-normal\n-medium')
     diff_level = input('Your answer: ')
 
-    assert diff_level == ('normal' or 'medium')
+    assert diff_level == ('normal' or 'medium'), 'You entered wrong level of the difficulty (typo)!'
 
     curr_us = User(user_nick, diff_level)
     cleaner()
@@ -133,33 +146,32 @@ def quiz(user_class):
     print(painter('-------We can start quiz now!-------', g=255, b=100))
     print('Choose what topic of the quiz you prefer: python or math?')
     quiz_topic = input('Your answer: ')
+    assert quiz_topic == 'python' or 'math', 'You entered wrong type of the quiz (typo)!'
     cleaner()
 
     match user_class.level:
-
         case 'medium':
             print('You chose medium difficulty, you can get 150 points for the right answer!')
             if quiz_topic == 'python':
                 print(painter('Your answer shulod be correct to examplepattern: a\n', r=200))
-                sleep(3)
+                sleep(4)
                 with open(r'C:\Users\jszub\PycharmProjects\Score-Counter-Game\data\python_medium_quiz', 'r') as file:  # Here use absolute path of the file where you have file with content of teh quiz
                     quiz_body(user_class, file, 'python')
             else:
                 print(painter('Your answer shulod be correct to examplepattern: 2\n', r=200))
-                sleep(3)
+                sleep(4)
                 with open(r'C:\Users\jszub\PycharmProjects\Score-Counter-Game\data\math_medium_quiz', 'r') as file:
                     quiz_body(user_class, file, 'math')
-
         case 'normal':
             print('You chose normal difficulty, you can get 100 points for the right answer!')
             if quiz_topic == 'python':
                 print(painter('Your answer shulod be correct to examplepattern: a\n', r=200))
-                sleep(3)
+                sleep(4)
                 with open(r'C:\Users\jszub\PycharmProjects\Score-Counter-Game\data\python_normal_quiz', 'r') as file:
                     quiz_body(user_class, file, 'python')
             else:
                 print(painter('Your answer shulod be correct to examplepattern: 2\n', r=200))
-                sleep(3)
+                sleep(4)
                 with open(r'C:\Users\jszub\PycharmProjects\Score-Counter-Game\data\math_normal_quiz', 'r') as file:
                     quiz_body(user_class, file, 'math')
 
@@ -176,6 +188,7 @@ def number_guessing(user_class):
     print(painter('-Remember the larger the range you choose and the faster you guess the number, the more points you get!\n', 255))
 
     choosen_range = int(input('If you read rules you can choose the range of the possible numbers: '))
+    assert choosen_range >= 2, 'You chosen to small range of teh numbers'
     print('Finally we can start game!')
     sleep(2)
     cleaner()
@@ -354,6 +367,8 @@ def memory_game(user_class):
         cleaner()
 
         user_password_answer = input('Enter password: ')
+        assert user_password_answer != '', 'Password must contains characters'
+
         if ''.join(gen_password) == user_password_answer:
             print(painter('Correct answer you\'re getting points!', g=255))
             user_class.all_points += 100
