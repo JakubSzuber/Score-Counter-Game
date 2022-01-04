@@ -1,5 +1,5 @@
 # Score-Counter-Game
-***Description:*** A console application that takes advantage of Python's many features mainly from standard library but also from the most basic modules. 
+***Description:*** A console application focused on using many of Python's features mainly from standard library but also from the most basic modules. 
 User in the game earns points for playing in four mini-games and at the end user can see its score and place at the leader board. Whole activity is saving into logs logs.txt file. A plan to expand this project in the future is to use curses module to create good looking terminal.
 ***Whole project and idea for it is totally my authorship!***
 
