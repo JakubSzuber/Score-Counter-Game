@@ -5,17 +5,34 @@ from users import User
 
 
 class Player(User):
-    def __init__(self, deck, nick, level='normal'):
-        self.deck = deck
-        super().__init__(nick, level)
+    """
+    Player - class responsibles for user which takes part into card game
+    """
 
-    def card_generator(self):  # Generator which return next card from deck
+    def __init__(self, deck, nick):
+        """Creates user which plays only in card game
+
+        Parameters
+        ----------
+        deck : list
+            The player's cards
+        nick : str
+            The nick of the player
+        """
+        self.deck = deck
+        super().__init__(nick)
+
+
+    def card_generator(self):
+        """Method that return next card from palyer's deck"""
         for i in range(len(self.deck)):
             yield self.deck[i]
         else:
             print('All cards were given!')
 
-    def report_marriage(self):  # Method which inform about marriage
+
+    def report_marriage(self):
+        """Method that checks if player has got marriage in its deck and possibly report that"""
         clover = 0
         tile = 0
         piker = 0
@@ -39,24 +56,41 @@ class Player(User):
                 heart += 1
 
         if clover == 2:
-            print(f'{self.nick} have clover marriage and getting 60 pomits!\n')
+            print(f'{self.nick} have clover marriage and getting 60 points!\n')
             sleep(2)
             self.all_points += 60
         if tile == 2:
-            print(f'{self.nick} have tile marriage and getting 80 pomits!\n')
+            print(f'{self.nick} have tile marriage and getting 80 points!\n')
             sleep(2)
             self.all_points += 80
         if heart == 2:
-            print(f'{self.nick} have heart marriage and getting 100 pomits!\n')
+            print(f'{self.nick} have heart marriage and getting 100 points!\n')
             sleep(2)
             self.all_points += 100
         if piker == 2:
-            print(f'{self.nick} have piker marriage and getting 40 pomits!\n')
+            print(f'{self.nick} have piker marriage and getting 40 points!\n')
             sleep(2)
             self.all_points += 40
 
+
     @classmethod
-    def player_creator(cls, suit, figures, nick, level):  # method which create instance
+    def player_creator(cls, suit, figures, nick):
+        """Method that creates two players and returns decks for each of them
+
+        Parameters
+        ----------
+        suit : list
+            All types card's suit
+        figures : list
+            All types card's figure
+        nick : str
+            The user's nick
+
+        Returns
+        -------
+        list
+            a list which have ready deck for both player which take part into the game
+        """
         dict_all_cards = {}
         all_cards_list = []
 
@@ -70,9 +104,10 @@ class Player(User):
 
         shuffle(all_cards_list)
 
-        player_1 = cls(all_cards_list[:12], nick, level)
-        player_2 = cls(all_cards_list[12:], nick, level)
+        player_1 = cls(all_cards_list[:12], nick)
+        player_2 = cls(all_cards_list[12:], nick)
 
         return [player_1, player_2]
 
-    ending = staticmethod(lambda: print('Thanks for playing, good game!'))
+
+    ending = staticmethod(lambda: print('Thanks for playing, good game!'))  # Method which prints farewell
