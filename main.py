@@ -1,3 +1,4 @@
+from time import sleep
 import functions as func
 
 
@@ -18,7 +19,7 @@ def main():
         func.russian_schnapsen_game(current_user)
         func.memory_game(current_user)
 
-        with func.CmEndWindow(r'C:\Users\jszub\OneDrive\Pulpit\logs.txt', 'a', current_user):
+        with func.CmEndWindow(r'C:\Users\jszub\PycharmProjects\Score-Counter-Game\logs.txt', 'a', current_user):
             print(current_user)  # Show to user earned points in each game and in the whole app
 
         leader_board.append({current_user.nick: current_user.all_points})  # Add user to teh leader board
@@ -26,9 +27,11 @@ def main():
         # Showing leader board from best score to the worst one if the user whant to see it
         leader_board_show = input('If you want to see leader board enter "yes" and if you want to start new session enter anything else: ')
         if leader_board_show == 'yes':
+            print('\n')
             leader_board.sort(key=lambda x: list(x.values())[0])
             for user in list(enumerate(leader_board, start=1)):
                 print(user)
+            sleep(4.5)
         else:
             continue
 
