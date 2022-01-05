@@ -51,9 +51,10 @@ class User:
 
 
     def __str__(self):
-        """Method which show all of user's points"""
-        print(f'You overall scored: {self.all_points}!')
-        print(f'In quiz you scored: {self.quiz_points}')
-        print(f'In number guessing game you scored: {self.num_guess_points}')
-        print(f'In russian schnapsen game you scored: {self.card_points}')
-        print(f'In memory game you scored: {self.memory_points}')
+        content = f"""Method which show all of user's points
+You overall scored: {self.all_points}!
+In quiz you scored: {self.quiz_points}
+In number guessing game you scored: {self.num_guess_points}
+In russian schnapsen game you scored: {self.card_points}
+In memory game you scored: {self.memory_points}"""
+        return content
