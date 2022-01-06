@@ -38,7 +38,7 @@ class CmEndWindow:
         sleep(2)
         cleaner()
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self, exc_type, exc_val, exc_tb):
         self.file_obj.close()
 
 
