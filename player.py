@@ -89,7 +89,7 @@ class Player(User):
         Returns
         -------
         list
-            a list which have ready deck for both player which take part into the game
+            a list which have ready decks (shuffled) for both player which take part into the game
         """
         dict_all_cards = {}
         all_cards_list = []
