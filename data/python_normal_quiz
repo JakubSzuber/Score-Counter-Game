@@ -34,7 +34,7 @@ b) False
 c) -1
 d) Error
 a
-Choose answer whuch contains only mutable objects?
+Choose answer which contains only mutable objects:
 a) list, set, tuple
 b) list, tuple, dictionary
 c) list, set, string
