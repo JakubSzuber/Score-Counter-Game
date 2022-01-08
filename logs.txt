@@ -1,2 +1,3 @@
-Logs from application Counter-Score-game:
+Logs from application Counter-Score-game
+----------------------------------------
 
