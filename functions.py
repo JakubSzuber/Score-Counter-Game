@@ -400,7 +400,7 @@ def cleaner():  # TODO change this function into npyscreen (a Python curses wrap
 def quiz_body(us_cl, f, quiz_type):
     cleaner()
     counter = 0
-    correct_answers = 0
+    correct_answers = []
     for line in f:
         counter += 1
 
@@ -411,32 +411,39 @@ def quiz_body(us_cl, f, quiz_type):
                 correct_ans = eval(line.rstrip())
                 if float(user_answer) == correct_ans:
                     print(painter('Good answer, you\'re getting points!', g=255))
-                    us_cl += 150  # Use mothod call in class User (add points to object)
+                    us_cl += 150  # Use method __iadd__() in class User (add points to object)
                     us_cl.quiz_points += 150
-                    correct_answers += 1
+                    correct_answers.append(1)
                     sleep(2)
                     cleaner()
                 else:
                     print(painter('Bad answer!', 255))
+                    correct_answers.append(0)
                     sleep(2)
                     cleaner()
             else:
                 correct_ans = line.rstrip()
                 if user_answer == correct_ans:
                     print(painter('Good answer, you\'re getting points!', g=255))
-                    us_cl += 150  # Use mothod call in class User (add points to object)
+                    us_cl += 150
                     us_cl.quiz_points += 150
-                    correct_answers += 1
+                    correct_answers.append(1)
                     sleep(2)
                     cleaner()
                 else:
                     print(painter('Bad answer!', 255))
+                    correct_answers.append(0)
                     sleep(2)
                     cleaner()
         else:
             print(line.rstrip())
 
-    print(f'Congratulations {us_cl.nick} you finished quiz with score {correct_answers}/10, that gives us: {us_cl.quiz_points} points!')
+    if all(correct_answers):
+        print(f'Congratulations {us_cl.nick} you finished quiz with every possible correct answer!, that gives us: {us_cl.quiz_points} points!')
+    elif not any(correct_answers):
+        print(f'Sorry {us_cl.nick} you finished quiz without any correct answer...')
+    else:
+        print(f'Congratulations {us_cl.nick} you finished quiz with score {correct_answers.count(1)}/10, that gives us: {us_cl.quiz_points} points!')
     sleep(3)
 
 
