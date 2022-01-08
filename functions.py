@@ -18,7 +18,7 @@ def cm_sing_in_window(current_user):
     sleep(2)
     print('Saving, pleas wait...')
     yield
-    with open(r'C:\Users\jszub\PycharmProjects\Score-Counter-Game\logs.txt', 'a') as file:
+    with open(r'C:\Users\jszub\PycharmProjects\Score-Counter-Game\logs.txt', 'a') as file:  # Used absolute path of the file in which are stored logs from app
         file.write(f'{current_user.nick} started playing at {datetime.now()}\n')
     print('Saving succesful!')
     sleep(2)
@@ -64,7 +64,6 @@ def error_handler(func):
                 break
         return on
     return arguments
-
 
 
 def minigame_wrapper(game_type):
@@ -129,7 +128,7 @@ def pause_menu_window():
     print(painter('Enter 2 to see how much points have you scored', 192, 192, 192))
     print(painter('Enter 3 to end game', 192, 192, 192))
     print(painter('-'*20, 192, 192, 192))
-'''  # TODO to create this window is required npyscreen (a Python curses wrapper)
+'''  # TODO to create this function is required npyscreen (a Python curses wrapper)
 
 
 
