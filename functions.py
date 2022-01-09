@@ -56,6 +56,10 @@ def error_handler(func):
                 print(painter('A logic of the program has broken!', 250))
                 print('Details:', e)
                 sleep(5)
+            except (FileNotFoundError, FileExistsError) as e:
+                print(painter('Appeared error with file path!', 250))
+                print('Details:', e)
+                sleep(5)
             except Exception as e:
                 print(painter('Appeared unexpected error!', 250))
                 print('Details:', e)
@@ -109,7 +113,7 @@ def sing_in_window(l_board):
     print('\nChose level of difficult in quiz:\n-normal\n-medium')
     diff_level = input('Your answer: ')
 
-    assert diff_level != 'normal' or 'medium', 'You entered wrong level of the difficulty (typo)!'
+    assert diff_level == 'normal' or 'medium', 'You entered wrong level of the difficulty (typo)!'
 
     curr_us = User(user_nick, diff_level)
     cleaner()
