@@ -93,9 +93,9 @@ class Player(User):
         """
         dict_all_cards = {}
         all_cards_list = []
+        power = (i for i in range(9, 15))
 
         for s in suit:
-            power = (i for i in range(9, 15))
             for f in figures:
                 dict_all_cards[(s, f)] = next(power)
 
