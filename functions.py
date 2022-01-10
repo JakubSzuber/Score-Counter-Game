@@ -259,22 +259,26 @@ def russian_schnapsen_game(user_class):
 
             if card_1_power > card_2_power:
                 print(painter(f'{user_class.nick} is winning this turn!', g=255))
-                player_01.all_points += card_1_power+card_2_power
+                player_01 += card_1_power+card_2_power
                 player_01.card_points += card_1_power + card_2_power
                 user_class += card_1_power+card_2_power
                 user_class.card_points += card_1_power+card_2_power
                 sleep(2)
                 cleaner()
             elif card_1_power == card_2_power:
-                player_02.all_points += card_1_power+card_2_power
+                player_01 += card_1_power+card_2_power
+                player_01.card_points += card_1_power + card_2_power
+                user_class += card_1_power+card_2_power
+                user_class.card_points += card_1_power+card_2_power
+                player_02 += card_1_power+card_2_power
                 player_02.card_points += card_1_power + card_2_power
                 print('Draw!')
                 sleep(2)
                 cleaner()
             else:
                 print(painter(f'Computer\'s winning this turn!', 255))
-                user_class += card_1_power + card_2_power
-                user_class.card_points += card_1_power + card_2_power
+                player_02 += card_1_power+card_2_power
+                player_02.card_points += card_1_power + card_2_power
                 sleep(2)
                 cleaner()
         except StopIteration:
@@ -347,7 +351,7 @@ def memory_game(user_class):
 
     while True:
         if counter == 60:
-            print('Incredible score! You\'ve got maximum points form part two!')
+            print('Incredible score! You\'ve got maximum points from part two!')
             break
 
         gen_password = sample(chars_num, counter)
@@ -372,7 +376,7 @@ def memory_game(user_class):
 
         if ''.join(gen_password) == user_password_answer:
             print(painter('Correct answer you\'re getting points!', g=255))
-            user_class.all_points += 100
+            user_class += 100
             user_class.memory_points += 100
         else:
             print(painter('Sorry bad answer! Second part of game is over!', 255))
@@ -404,6 +408,7 @@ def quiz_body(us_cl, f, quiz_type):
     cleaner()
     counter = 0
     correct_answers = []
+
     for line in f:
         counter += 1
 
