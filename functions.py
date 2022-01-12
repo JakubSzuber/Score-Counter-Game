@@ -261,22 +261,18 @@ def russian_schnapsen_game(user_class):
                 print(painter(f'{user_class.nick} is winning this turn!', g=255))
                 player_01 += card_1_power+card_2_power
                 player_01.card_points += card_1_power + card_2_power
-                user_class += card_1_power+card_2_power
-                user_class.card_points += card_1_power+card_2_power
                 sleep(2)
                 cleaner()
             elif card_1_power == card_2_power:
                 player_01 += card_1_power+card_2_power
                 player_01.card_points += card_1_power + card_2_power
-                user_class += card_1_power+card_2_power
-                user_class.card_points += card_1_power+card_2_power
                 player_02 += card_1_power+card_2_power
                 player_02.card_points += card_1_power + card_2_power
                 print('Draw!')
                 sleep(2)
                 cleaner()
             else:
-                print(painter(f'Computer\'s winning this turn!', 255))
+                print(painter(f'{player_02.nick} is winning this turn!', g=255))
                 player_02 += card_1_power+card_2_power
                 player_02.card_points += card_1_power + card_2_power
                 sleep(2)
@@ -290,7 +286,7 @@ def russian_schnapsen_game(user_class):
             sleep(4.5)
             break
 
-    user_class.all_points += player_01.all_points
+    user_class += player_01.all_points
     user_class.card_points += player_01.all_points
 
 
