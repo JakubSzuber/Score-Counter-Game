@@ -37,6 +37,7 @@ class Player(User):
         tile = 0
         piker = 0
         heart = 0
+        '''
         for dictionary in self.deck:
             if ('clover', 'queen') in dictionary.keys():
                 clover += 1
@@ -71,6 +72,24 @@ class Player(User):
             print(f'{self.nick} have piker marriage and getting 40 points!\n')
             sleep(2)
             self.all_points += 40
+        '''  # TODO if code won't work uncomment old version of this method
+        for dictionary in self.deck:
+            if ('clover', 'queen') and ('clover', 'king') in dictionary.keys():
+                print(f'{self.nick} have clover marriage and getting 60 points!\n')
+                sleep(2)
+                self.all_points += 60
+            if ('tile', 'queen') and ('tile', 'king') in dictionary.keys():
+                print(f'{self.nick} have tile marriage and getting 80 points!\n')
+                sleep(2)
+                self.all_points += 80
+            if ('piker', 'queen') and ('piker', 'king') in dictionary.keys():
+                print(f'{self.nick} have piker marriage and getting 40 points!\n')
+                sleep(2)
+                self.all_points += 40
+            if ('heart', 'queen') and ('heart', 'king') in dictionary.keys():
+                print(f'{self.nick} have heart marriage and getting 100 points!\n')
+                sleep(2)
+                self.all_points += 100
 
 
     @classmethod
