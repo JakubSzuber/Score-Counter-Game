@@ -33,11 +33,12 @@ class Player(User):
 
     def report_marriage(self):
         """Method that checks if player has got marriage in its deck and possibly report that"""
+        '''
         clover = 0
         tile = 0
         piker = 0
         heart = 0
-        '''
+
         for dictionary in self.deck:
             if ('clover', 'queen') in dictionary.keys():
                 clover += 1
@@ -60,36 +61,44 @@ class Player(User):
             print(f'{self.nick} have clover marriage and getting 60 points!\n')
             sleep(2)
             self.all_points += 60
+            self.card_points += 60
         if tile == 2:
             print(f'{self.nick} have tile marriage and getting 80 points!\n')
             sleep(2)
             self.all_points += 80
+            self.card_points += 80
         if heart == 2:
             print(f'{self.nick} have heart marriage and getting 100 points!\n')
             sleep(2)
             self.all_points += 100
+            self.card_points += 100
         if piker == 2:
             print(f'{self.nick} have piker marriage and getting 40 points!\n')
             sleep(2)
             self.all_points += 40
+            self.card_points += 40
         '''  # TODO if code won't work uncomment old version of this method
-        for dictionary in self.deck:
-            if ('clover', 'queen') and ('clover', 'king') in dictionary.keys():
-                print(f'{self.nick} have clover marriage and getting 60 points!\n')
-                sleep(2)
-                self.all_points += 60
-            if ('tile', 'queen') and ('tile', 'king') in dictionary.keys():
-                print(f'{self.nick} have tile marriage and getting 80 points!\n')
-                sleep(2)
-                self.all_points += 80
-            if ('piker', 'queen') and ('piker', 'king') in dictionary.keys():
-                print(f'{self.nick} have piker marriage and getting 40 points!\n')
-                sleep(2)
-                self.all_points += 40
-            if ('heart', 'queen') and ('heart', 'king') in dictionary.keys():
-                print(f'{self.nick} have heart marriage and getting 100 points!\n')
-                sleep(2)
-                self.all_points += 100
+
+        if {('clover', 'queen'): 12} and {('clover', 'king'): 13} in self.deck:
+            print(f'{self.nick} have clover marriage and getting 60 points!\n')
+            sleep(2)
+            self.all_points += 60
+            self.card_points += 60
+        if {('tile', 'queen'): 12} and {('tile', 'king'): 13} in self.deck:
+            print(f'{self.nick} have tile marriage and getting 80 points!\n')
+            sleep(2)
+            self.all_points += 80
+            self.card_points += 80
+        if {('piker', 'queen'): 12} and {('piker', 'king'): 13} in self.deck:
+            print(f'{self.nick} have piker marriage and getting 40 points!\n')
+            sleep(2)
+            self.all_points += 40
+            self.card_points += 40
+        if {('heart', 'queen'): 12} and {('heart', 'king'): 13} in self.deck:
+            print(f'{self.nick} have heart marriage and getting 100 points!\n')
+            sleep(2)
+            self.all_points += 100
+            self.card_points += 100
 
 
     @classmethod
@@ -112,9 +121,9 @@ class Player(User):
         """
         dict_all_cards = {}
         all_cards_list = []
-        power = (i for i in range(9, 15))
 
         for s in suit:
+            power = (i for i in range(9, 15))
             for f in figures:
                 dict_all_cards[(s, f)] = next(power)
 
