@@ -51,8 +51,8 @@ class User:
 
 
     def __str__(self):
-        content = f"""Method which show all of user's points
-You overall scored: {self.all_points}!
+        """Method which show all of user's points"""
+        content = f"""You overall scored: {self.all_points}!
 In quiz you scored: {self.quiz_points}
 In number guessing game you scored: {self.num_guess_points}
 In russian schnapsen game you scored: {self.card_points}
