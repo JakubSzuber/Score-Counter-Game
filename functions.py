@@ -211,12 +211,13 @@ def number_guessing(user_class):
         earned_points = choosen_range//counter*10
         user_class += earned_points
         user_class.num_guess_points += earned_points
-        print(painter(f'Gangratulations {user_class.nick}, you quess correct after {counter} times!', g=255))
+        print(painter(f'Congratulations {user_class.nick}, you quess correct after {counter} times!', g=255))
         print(painter(f'You earned {earned_points} points', g=255))
-        sleep(3)
+        sleep(3.5)
+        cleaner()
 
 
-#@error_handler
+@error_handler
 @minigame_wrapper('russian schnapsen game')
 def russian_schnapsen_game(user_class):
     print(painter('-------We can start card game now!-------', g=255, b=100))
