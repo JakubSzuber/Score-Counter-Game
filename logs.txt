@@ -1,3 +1,2 @@
 Logs from application Counter-Score-game
 ----------------------------------------
-
