@@ -96,4 +96,5 @@ class Player(User):
         return [player_1, player_2]
 
 
-    ending = staticmethod(lambda: print('Thanks for playing, good game!'))  # Method which prints farewell
+    ending = staticmethod(lambda: print('Thanks for playing, good game!'))
+    """Method which prints farewell"""
