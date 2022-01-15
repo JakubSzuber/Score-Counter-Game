@@ -26,11 +26,21 @@ def main():
 
         # Showing leader board from best score to the worst one if the user whant to see it
         leader_board_show = input('If you want to see leader board enter "yes" and if you want to start new session enter anything else: ')
+
         if leader_board_show == 'yes':
             print('\n')
             leader_board.sort(key=lambda x: list(x.values())[0])
+
             for user in list(enumerate(leader_board, start=1)):
-                print(user)
+                if user[0] == 1:
+                    print(func.painter(user, 212, 175, 55))
+                elif user[0] == 2:
+                    print(func.painter(user, 180, 180, 180))
+                elif user[0] == 3:
+                    print(func.painter(user, 173, 138, 86))
+                else:
+                    print(user)
+
             sleep(4.5)
         else:
             continue
