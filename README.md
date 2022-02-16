@@ -8,12 +8,12 @@ User in the game earns points for playing in four mini-games and at the end user
 - Good to have pycharm
 
 ## What I learned
-- How to plan and expand projects
-- How to use my knowledge into creating project
-- Good devision project into separated files which works with each other
-- Put wole code into classes and functions (OOP)
-- Get in the habit of writing code frequently and adding descriptive comments
-- Working with Git into pycharm
+- How to plan and creating project from scratch and expand existing projects with new features
+- How to use my knowledge of python and programming into actually creating project
+- Good division project into separated files which works with each other
+- Put most code into classes and functions (OOP approach)
+- Get in the habit of writing code frequently and writing it clean with descriptive comments
+- Working with Git (aspecially into pycharm)
 
 ### Used technologies
 `Python 3.10`, `Git`
