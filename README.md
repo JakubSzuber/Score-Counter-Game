@@ -34,5 +34,5 @@ flowchart TD
   H -- Yes --> I{Output leader board};
   I --> J;
   H -- No --> J(End);
-  J --> A;
+  J --> B;
 ```
