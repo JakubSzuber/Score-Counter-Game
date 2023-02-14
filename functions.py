@@ -93,7 +93,7 @@ def start_window():
     sleep(12)
     cleaner()
     print('Here is the list of games that you will play sequentially:')
-    print('1 - quizzes about path or python.')
+    print('1 - quizzes about math or python.')
     print('2 - number guessing game.')
     print('3 - russian schnapsen game (card game).')
     print('4 - color-number memory game.')
@@ -151,24 +151,24 @@ def quiz(user_class):
         case 'medium':
             print('You chose medium difficulty, you can get 150 points for the right answer!')
             if quiz_topic == 'python':
-                print(painter('Your answer should be correct to examplepattern: a\n', r=250))
+                print(painter('Your answer should be correct to example pattern: a\n', r=250))
                 sleep(5)
                 with open(r'C:\Users\jszub\PycharmProjects\Score-Counter-Game\data\python_medium_quiz', 'r') as file:  # Used absolute path of the file where is content of the quiz
                     quiz_body(user_class, file, 'python')
             else:
-                print(painter('Your answer should be correct to examplepattern: 2\n', r=250))
+                print(painter('Your answer should be correct to example pattern: 2\n', r=250))
                 sleep(5)
                 with open(r'C:\Users\jszub\PycharmProjects\Score-Counter-Game\data\math_medium_quiz', 'r') as file:
                     quiz_body(user_class, file, 'math')
         case 'normal':
             print('You chose normal difficulty, you can get 100 points for the right answer!')
             if quiz_topic == 'python':
-                print(painter('Your answer should be correct to examplepattern: a\n', r=250))
+                print(painter('Your answer should be correct to example pattern: a\n', r=250))
                 sleep(5)
                 with open(r'C:\Users\jszub\PycharmProjects\Score-Counter-Game\data\python_normal_quiz', 'r') as file:
                     quiz_body(user_class, file, 'python')
             else:
-                print(painter('Your answer should be correct to examplepattern: 2\n', r=250))
+                print(painter('Your answer should be correct to example pattern: 2\n', r=250))
                 sleep(5)
                 with open(r'C:\Users\jszub\PycharmProjects\Score-Counter-Game\data\math_normal_quiz', 'r') as file:
                     quiz_body(user_class, file, 'math')
@@ -184,9 +184,9 @@ def number_guessing(user_class):
     print(painter('-You have no limit of trials untill you quess the number', 255))
     print(painter('-Program will help you to guess it', 255))
     print(painter('-Remember the larger the range you choose and the faster you guess the number, the more points you get!', 255))
-    print(painter('-Your answer should be correct to examplepattern: 35\n', r=250))
+    print(painter('-Your answer should be correct to example pattern: 35\n', r=250))
 
-    choosen_range = int(input('If you read rules you can choose the range of the possible numbers (e.g 100): '))
+    choosen_range = int(input('If you read rules you can choose the range of the possible numbers (e.g. 100): '))
     assert choosen_range >= 2, 'You chosen to small range of the numbers'
     print('Finally we can start game!')
     sleep(2)
@@ -301,7 +301,7 @@ def memory_game(user_class):
     print(painter('-The amount of the digits in the number will be increasing', 255))
     print(painter('-If you make a mistake the first part of the game will end', 255))
     print(painter('-You can earn more points from the bigger numbers!', 255))
-    print(painter('-Your answer should be correct to examplepattern: 35\n', r=250))
+    print(painter('-Your answer should be correct to example pattern: 35\n', r=250))
 
     input('If you\'re ready enter anything: ')
     print('Finally we can start game!')

@@ -22,7 +22,7 @@ def main():
         with func.CmEndWindow(r'C:\Users\jszub\PycharmProjects\Score-Counter-Game\logs.txt', 'a', current_user):
             print(current_user)  # Show to user earned points in each game and in the whole app
 
-        leader_board.append({current_user.nick: current_user.all_points})  # Add user to teh leader board
+        leader_board.append({current_user.nick: current_user.all_points})  # Add user to the leader board
 
         # Showing leader board from best score to the worst one if the user whant to see it
         leader_board_show = input('If you want to see leader board enter "yes" and if you want to start new session enter anything else: ')
