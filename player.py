@@ -9,7 +9,7 @@ class Player(User):
     Player - class responsibles for user which takes part into card game
     """
 
-    def __init__(self, deck: list, nick: str) -> None:
+    def __init__(self, deck: list[dict[tuple[str, str], int]], nick: str) -> None:
         """Creates user which plays only in card game
 
         Parameters
@@ -19,7 +19,7 @@ class Player(User):
         nick : str
             The nick of the player
         """
-        self.deck: list = deck
+        self.deck: list[dict[tuple[str, str], int]] = deck
         super().__init__(nick)
 
 

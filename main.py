@@ -4,7 +4,7 @@ import users
 
 
 def main() -> None:
-    leader_board: list[dict[str, int]] = []  # A list of each user who has finished all minigames
+    leader_board: list[dict[str | int, int]] = []  # A list of each user who has finished all minigames
 
     while True:
         # Greeting the user and explain what it will do
@@ -34,11 +34,11 @@ def main() -> None:
 
             for user in list(enumerate(leader_board, start=1)):
                 if user[0] == 1:
-                    print(func.painter(user, 212, 175, 55))
+                    print(func.painter(str(user), 212, 175, 55))
                 elif user[0] == 2:
-                    print(func.painter(user, 180, 180, 180))
+                    print(func.painter(str(user), 180, 180, 180))
                 elif user[0] == 3:
-                    print(func.painter(user, 173, 138, 86))
+                    print(func.painter(str(user), 173, 138, 86))
                 else:
                     print(user)
 

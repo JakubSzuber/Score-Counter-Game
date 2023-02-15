@@ -106,7 +106,7 @@ def start_window() -> None:
 
 
 @error_handler
-def sign_in_window(l_board: list[int, dict[str, int]]) -> User:
+def sign_in_window(l_board: list[dict[str, int]]) -> User:
     print('Before we start enter data:')
     user_nick: str = input('Your nick: ')
 
@@ -121,11 +121,6 @@ def sign_in_window(l_board: list[int, dict[str, int]]) -> User:
     curr_us: User = User(user_nick, diff_level)
     cleaner()
     return curr_us
-
-
-def end_window_1(user_class: User) -> None:
-    print(painter(f'Congratulations {user_class.nick}!', g=255, b=100))
-    print(user_class)
 
 
 # Minigames applications:
@@ -347,6 +342,8 @@ def memory_game(user_class: User) -> None:
 
         gen_password: list[str] = sample(chars_num, counter)
         gen_color: str = choice(colors)
+
+        combination: list[int] = [0, 0, 0]
 
         match gen_color:
             case 'red':

@@ -25,6 +25,7 @@ class User:
         self.memory_points: int = 0
 
 
+    # TODO this method will be used when GUI will be applied
     def __call__(self, new_nick: str) -> None:
         """Method that allows to change the nick
 
