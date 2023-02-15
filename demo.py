@@ -6,18 +6,64 @@ import users
 import tkinter
 import tkinter.messagebox
 import customtkinter
+from PIL import Image, ImageTk
 
 
 customtkinter.set_appearance_mode("System")  # XXX
 customtkinter.set_default_color_theme("blue")  # XXX
 
+
 # XXX
-class App(customtkinter.CTk):
+def XXX():
+    app.destroy()
+    main_win = MainWindow()
+    main_win.mainloop()
+
+
+# XXX
+class MainWindow(customtkinter.CTk):
     def __init__(self):
         super().__init__()
 
-        self.title("CustomTkinter complex_example.py")
-        self.geometry(f"{1250}x{680}")
+        self.title("Score-Counter-Game")
+        self.geometry(f"{600}x{350}")
+        # self.minsize(300, 200) TODO set value when the app will be finished
+
+        self.welcome_text_1 = customtkinter.CTkLabel(master=self, text="Score-Counter-Game", font=customtkinter.CTkFont(size=20, weight="bold"))
+        self.welcome_text_1.grid(row=0, column=3, pady=(20, 0))
+
+# XXX
+class StartWindow(customtkinter.CTk):
+    def __init__(self):
+        super().__init__()
+
+        self.title("Score-Counter-Game")
+        self.geometry(f"{600}x{350}")
+        self.resizable(False, False)
+        #self.minsize(300, 200) TODO set value when the app will be finished
+
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_columnconfigure((0, 1), weight=1)
+
+        background_img = customtkinter.CTkImage(Image.open("background.jpg"), size=(950, 350))
+        self.img_base = customtkinter.CTkLabel(master=self, image=background_img)
+        self.img_base.grid(row=0, column=0, columnspan=2)
+
+        framexxx=customtkinter.CTkFrame(master=self.img_base, width=320, height=360, corner_radius=15)
+        framexxx.grid(row=0, column=0, columnspan=2, padx=20, pady=(25, 25), sticky="nsew")
+
+        self.welcome_text_1 = customtkinter.CTkLabel(master=framexxx, text="Score-Counter-Game", font=customtkinter.CTkFont(size=20, weight="bold"))
+        self.welcome_text_1.grid(row=0, column=3, pady=(20, 0))
+
+        self.welcome_text_2 = customtkinter.CTkLabel(master=framexxx, text="Made by: Jakub Szuber", font=customtkinter.CTkFont(size=10))
+        self.welcome_text_2.grid(row=1, column=3, pady=(10, 0))
+
+        self.start_button = customtkinter.CTkButton(master=framexxx, command=XXX, width=220, corner_radius=6, fg_color="green", border_color="#064503", border_width=1, hover_color="#12780e", text="Start the game")
+        self.start_button.grid(row=2, column=0, columnspan=2, padx=20, pady=10)
+
+
+
+
 
     # leader_board: list[dict[str, int]] = []  # A list of each user who has finished all minigames
     #
@@ -65,5 +111,5 @@ class App(customtkinter.CTk):
 
 
 if __name__ == "__main__":
-    app = App()
+    app = StartWindow()
     app.mainloop()
