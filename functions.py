@@ -5,15 +5,19 @@ from contextlib import contextmanager
 from datetime import datetime
 from time import time
 import math
+from typing import TextIO, Generator, Callable
 from random import (sample, choice, randint)
 from string import (digits, ascii_letters)
 from users import User
 from player import Player
 
 
+# Global variable which counts the user's correct answers
+correct_answers: list[int] = []
+
 # Context managers and wrappers:
 @contextmanager
-def cm_sing_in_window(current_user):
+def cm_sign_in_window(current_user: User) -> None:
     print('Your nick and time of staring playing will be saved into file (and your every activity in this game).')
     sleep(3.5)
     print('Saving, pleas wait...')
@@ -26,23 +30,24 @@ def cm_sing_in_window(current_user):
 
 
 class CmEndWindow:
-    def __init__(self, path, method, current_user):
-        self.file_obj = open(path, method)
-        self.current_user = current_user
+    def __init__(self, path: str, method: str, current_user: User) -> None:
+        self.file_obj: TextIO = open(path, method)
+        self.current_user: User = current_user
 
-    def __enter__(self):
-        print('This is and of the application!')
+    def __enter__(self) -> None:
+        correct_answers.clear()
+        print('This is end of the application!')
         print('Saving overall score into file, pleas wait...')
-        self.file_obj.write(f'{self.current_user.nick} end with score: {self.current_user.all_points}\n\n')
+        self.file_obj.write(f'{self.current_user.nick} end with score: {self.current_user.all_points}\n')
         print('Saving succesful!')
         sleep(4)
         cleaner()
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(self, exc_type: str, exc_val: str, exc_tb: str) -> None:
         self.file_obj.close()
 
 
-def error_handler(func):
+def error_handler(func: Callable):
     def arguments(*args):
         while True:
             try:
@@ -70,23 +75,22 @@ def error_handler(func):
     return arguments
 
 
-def minigame_wrapper(game_type):
-    def take_clas(function):
+def minigame_wrapper(game_type: str):
+    def take_clas(function: Callable):
         def wrapper(*args):
             with open(r'C:\Users\jszub\PycharmProjects\Score-Counter-Game\logs.txt', 'a') as file:
                 file.write(f'User start playing {game_type} at {datetime.now()}\n')
-                start = time()
+                start: float = time()
                 on = function(*args)
-                end = time()
+                end: float = time()
                 file.write(f'User end playing {game_type} at {datetime.now()} (about {round(end-start)} seconds in game)\n')
             return on
         return wrapper
     return take_clas
 
 
-
 # General functions:
-def start_window():
+def start_window() -> None:
     print('Hello user!')
     print('You will be playing in few games, where you can completing tasks and collecting points. \nWhen you end all four minigames you could see leader board and start playing anew. Good luck!\n')
     print('PS: Follow the guidelines carefully because if you cause an error you probably will have to play mini-game from the begining!')
@@ -97,52 +101,40 @@ def start_window():
     print('2 - number guessing game.')
     print('3 - russian schnapsen game (card game).')
     print('4 - color-number memory game.')
-    # print('Enter 0 to open pause menu.')  # TODO to create this window is required npyscreen (a Python curses wrapper)
     print('-'*58)
     input('If you ready enter anything: ')
 
 
 @error_handler
-def sing_in_window(l_board):
+def sign_in_window(l_board: list[int, dict[str, int]]) -> User:
     print('Before we start enter data:')
-    user_nick = input('Your nick: ')
+    user_nick: str = input('Your nick: ')
 
     assert user_nick not in l_board, 'User with this nick is already saved in the leader board!'
     assert user_nick != '', 'Your nick must have characters!'
 
     print('\nChose level of difficult in quiz:\n-normal\n-medium')
-    diff_level = input('Your answer: ')
+    diff_level: str = input('Your answer: ')
 
     assert diff_level == 'normal' or 'medium', 'You entered wrong level of the difficulty (typo)!'
 
-    curr_us = User(user_nick, diff_level)
+    curr_us: User = User(user_nick, diff_level)
     cleaner()
     return curr_us
 
 
-def end_window_1(user_class):
+def end_window_1(user_class: User) -> None:
     print(painter(f'Congratulations {user_class.nick}!', g=255, b=100))
     print(user_class)
-
-
-'''
-def pause_menu_window():
-    print(10*'-', 'Pause menu', 10*'-')
-    print(painter('Enter 1 to see how much time have you playing', 192, 192, 192))
-    print(painter('Enter 2 to see how much points have you scored', 192, 192, 192))
-    print(painter('Enter 3 to end game', 192, 192, 192))
-    print(painter('-'*20, 192, 192, 192))
-'''  # TODO to create this function is required npyscreen (a Python curses wrapper)
-
 
 
 # Minigames applications:
 @error_handler
 @minigame_wrapper('quiz')
-def quiz(user_class):
+def quiz(user_class: User) -> None:
     print(painter('-------We can start quiz now!-------', g=255, b=100))
     print('Choose what topic of the quiz you prefer: python or math?')
-    quiz_topic = input('Your answer: ')
+    quiz_topic: str = input('Your answer: ')
     assert quiz_topic == 'python' or 'math', 'You entered wrong type of the quiz (typo)!'
 
     cleaner()
@@ -176,7 +168,7 @@ def quiz(user_class):
 
 @error_handler
 @minigame_wrapper('number guessing')
-def number_guessing(user_class):
+def number_guessing(user_class: User) -> None:
     print(painter('-------We can start number guessing game now!-------', g=255, b=100))
     print(painter('Below rules of the game:', 255))
     print(painter('-You will choose range of the number to quess one number from this range', 255))
@@ -186,29 +178,29 @@ def number_guessing(user_class):
     print(painter('-Remember the larger the range you choose and the faster you guess the number, the more points you get!', 255))
     print(painter('-Your answer should be correct to example pattern: 35\n', r=250))
 
-    choosen_range = int(input('If you read rules you can choose the range of the possible numbers (e.g. 100): '))
+    choosen_range: int = int(input('If you read rules you can choose the range of the possible numbers (e.g. 100): '))
     assert choosen_range >= 2, 'You chosen to small range of the numbers'
     print('Finally we can start game!')
     sleep(2)
     cleaner()
 
-    drawn_num = randint(0, choosen_range)
-    counter = 0
+    drawn_num: int = randint(0, choosen_range)
+    counter: int = 0
 
-    user_trial = int(input('Guess number: '))
+    user_trial: int = int(input('Guess number: '))
     counter += 1
 
     while user_trial != drawn_num:
         if user_trial < drawn_num:
             print('Too small number!\n')
-            user_trial = int(input('Guess number: '))
+            user_trial: int = int(input('Guess number: '))
             counter += 1
         elif user_trial > drawn_num:
             print('Too big number!\n')
-            user_trial = int(input('Guess number: '))
+            user_trial: int = int(input('Guess number: '))
             counter += 1
     else:
-        earned_points = choosen_range//counter*10
+        earned_points: int = choosen_range//counter*10
         user_class += earned_points
         user_class.num_guess_points += earned_points
         print(painter(f'Congratulations {user_class.nick}, you quess correct after {counter} times!', g=255))
@@ -219,7 +211,7 @@ def number_guessing(user_class):
 
 @error_handler
 @minigame_wrapper('russian schnapsen game')
-def russian_schnapsen_game(user_class):
+def russian_schnapsen_game(user_class: User) -> None:
     print(painter('-------We can start card game now!-------', g=255, b=100))
     print(painter('Below rules of the game:', 255))
     print(painter('-You will play against computer', 255))
@@ -233,31 +225,31 @@ def russian_schnapsen_game(user_class):
     sleep(2)
     cleaner()
 
-    suit = ['heart', 'tile', 'clover', 'piker']
-    figures = ['9', '10', 'jack', 'queen', 'king', 'ace']
+    suit: list[str] = ['heart', 'tile', 'clover', 'piker']
+    figures: list[str] = ['9', '10', 'jack', 'queen', 'king', 'ace']
 
-    deck_parts = Player.player_creator(suit, figures, user_class.nick)
-    player_01 = deck_parts[0]
-    player_02 = deck_parts[1]
+    deck_parts: list[Player, Player] = Player.player_creator(suit, figures, user_class.nick)
+    player_01: Player = deck_parts[0]
+    player_02: Player = deck_parts[1]
 
     player_02.nick = 'Computer'
 
     player_01.report_marriage()
     player_02.report_marriage()
 
-    player_01_cards = player_01.card_generator()
-    player_02_cards = player_02.card_generator()
+    player_01_cards: Generator[dict, None, None] = player_01.card_generator()
+    player_02_cards: Generator[dict, None, None] = player_02.card_generator()
 
     while True:
         try:
-            card_1 = next(player_01_cards)
-            card_2 = next(player_02_cards)
+            card_1: dict[str, str] = next(player_01_cards)
+            card_2: dict[str, str] = next(player_02_cards)
 
             print(f'{user_class.nick} card: {card_1}')
             print(f'Computer card: {card_2}')
 
-            card_1_power = list(card_1.values())[0]
-            card_2_power = list(card_2.values())[0]
+            card_1_power: int = int(list(card_1.values())[0])
+            card_2_power: int = int(list(card_2.values())[0])
 
             if card_1_power > card_2_power:
                 print(painter(f'{user_class.nick} is winning this turn!', g=255))
@@ -294,7 +286,7 @@ def russian_schnapsen_game(user_class):
 
 @error_handler
 @minigame_wrapper('memory game')
-def memory_game(user_class):
+def memory_game(user_class: User) -> None:
     print(painter('We can start memory game now!', g=255, b=100))
     print(painter('Below rules of the first part of game:', 255))
     print(painter('-You will see number for 2 second and then you have to enter it correct', 255))
@@ -308,13 +300,13 @@ def memory_game(user_class):
     sleep(2)
     cleaner()
 
-    iterator = 100
+    iterator: int = 100
     while True:
         print('Number:', secret_num := randint(iterator, iterator*2))
         sleep(3)
         cleaner()
 
-        users_trial = int(input('Enter number: '))
+        users_trial: int = int(input('Enter number: '))
 
         if users_trial == secret_num:
             print(painter(f'Correct answer! You get {iterator//20} points!', g=255))
@@ -344,17 +336,17 @@ def memory_game(user_class):
     sleep(2)
     cleaner()
 
-    colors = ['red', 'green', 'blue', 'pink']
-    chars_num = list(chain(digits, ascii_letters))
-    counter = 2
+    colors: list[str] = ['red', 'green', 'blue', 'pink']
+    chars_num: list[str] = list(chain(digits, ascii_letters))
+    counter: int = 2
 
     while True:
         if counter == 60:
             print('Incredible score! You\'ve got maximum points from part two!')
             break
 
-        gen_password = sample(chars_num, counter)
-        gen_color = choice(colors)
+        gen_password: list[str] = sample(chars_num, counter)
+        gen_color: str = choice(colors)
 
         match gen_color:
             case 'red':
@@ -370,7 +362,7 @@ def memory_game(user_class):
         sleep(3)
         cleaner()
 
-        user_password_answer = input('Enter password: ')
+        user_password_answer: str = input('Enter password: ')
         assert user_password_answer != '', 'Password must contains characters'
 
         if ''.join(gen_password) == user_password_answer:
@@ -399,22 +391,21 @@ def memory_game(user_class):
 
 
 # Auxiliary functions and temporary function:
-def cleaner():  # TODO change this function into npyscreen (a Python curses wrapper) in the future
+def cleaner() -> None:  # TODO this function won't be needed when the GUI will be created
     print(20*'\n')
 
 
 @error_handler
 @lru_cache
-def quiz_body(us_cl, f, quiz_type):
+def quiz_body(us_cl: User, f: TextIO, quiz_type: str) -> None:  # Argument "f" is a file reference
     cleaner()
-    counter = 0
-    correct_answers = []
+    counter: int = 0
 
     for line in f:
         counter += 1
 
         if counter % 6 == 0:
-            user_answer = input('Your answer: ')
+            user_answer: str = input('Your answer: ')
             assert user_answer != '', 'You didn\'t select any answer!'
             if quiz_type == 'math':
                 correct_ans = eval(line.rstrip())
@@ -448,7 +439,7 @@ def quiz_body(us_cl, f, quiz_type):
             print(line.rstrip())
 
     if all(correct_answers):
-        print(painter(f'Congratulations {us_cl.nick} you finished quiz with every possible correct answer!, that gives us: {us_cl.quiz_points} points!'))
+        print(painter(f'Congratulations {us_cl.nick} you finished quiz with every possible correct answer!, that gives us: {us_cl.quiz_points} points!', g=255, b=100))
     elif not any(correct_answers):
         print(painter(f'Sorry {us_cl.nick} you finished quiz without any correct answer...'))
     else:
@@ -456,5 +447,5 @@ def quiz_body(us_cl, f, quiz_type):
     sleep(4)
 
 
-def painter(text, r=0, g=0, b=0):
+def painter(text: str, r:int = 0, g:int = 0, b:int = 0) -> str:
     return f'\033[38;2;{r};{g};{b}m{text} \033[38;2;255;255;255m'

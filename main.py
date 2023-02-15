@@ -1,17 +1,18 @@
 from time import sleep
 import functions as func
+import users
 
 
-def main():
-    leader_board = []  # A list of each user who has finished all minigames
+def main() -> None:
+    leader_board: list[dict[str, int]] = []  # A list of each user who has finished all minigames
 
     while True:
         # Greeting the user and explain what it will do
         func.cleaner()
         func.start_window()
 
-        with func.cm_sing_in_window(current_user := func.sing_in_window(leader_board)):  # Create instance of the class User and use context manager at one time
-            pass
+        with func.cm_sign_in_window(current_user := func.sign_in_window(leader_board)):  # Create instance of the class User and use context manager at one time
+            current_user: users.User
 
         # Use the functions responsible for the mini-games one by one
         func.quiz(current_user)
@@ -25,7 +26,7 @@ def main():
         leader_board.append({current_user.nick: current_user.all_points})  # Add user to the leader board
 
         # Showing leader board from best score to the worst one if the user whant to see it
-        leader_board_show = input('If you want to see leader board enter "yes" and if you want to start new session enter anything else: ')
+        leader_board_show: str = input('If you want to see leader board enter "yes" and if you want to start new session enter anything else: ')
 
         if leader_board_show == 'yes':
             print('\n')

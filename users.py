@@ -3,7 +3,7 @@ class User:
     User - class responsibles for basic user which takes part into mini-games
     """
 
-    def __init__(self, nick, level='normal'):
+    def __init__(self, nick: str, level: str = 'normal') -> None:
         """Creates exacly user
 
         Parameters
@@ -15,17 +15,17 @@ class User:
         other parameters : int
             Amount of points in each game
         """
-        self.nick = nick
-        self.level = level
+        self.nick: str = nick
+        self.level: str = level
 
-        self.all_points = 0
-        self.quiz_points = 0
-        self.num_guess_points = 0
-        self.card_points = 0
-        self.memory_points = 0
+        self.all_points: int = 0
+        self.quiz_points: int = 0
+        self.num_guess_points: int = 0
+        self.card_points: int = 0
+        self.memory_points: int = 0
 
 
-    def __call__(self, new_nick):
+    def __call__(self, new_nick: str) -> None:
         """Method that allows to change the nick
 
         Parameters
@@ -34,10 +34,10 @@ class User:
             The user's new nick
         """
 
-        self.nick = new_nick
+        self.nick: str = new_nick
 
 
-    def __iadd__(self, amounts_of_points):
+    def __iadd__(self, amounts_of_points: int) -> 'User':
         """Method that allows to add points
 
         Parameters
@@ -50,7 +50,7 @@ class User:
         return self
 
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Method which show all of user's points"""
         content = f"""You overall scored: {self.all_points}!
 In quiz you scored: {self.quiz_points}

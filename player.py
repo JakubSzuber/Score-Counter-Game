@@ -9,7 +9,7 @@ class Player(User):
     Player - class responsibles for user which takes part into card game
     """
 
-    def __init__(self, deck, nick):
+    def __init__(self, deck: list, nick: str) -> None:
         """Creates user which plays only in card game
 
         Parameters
@@ -19,7 +19,7 @@ class Player(User):
         nick : str
             The nick of the player
         """
-        self.deck = deck
+        self.deck: list = deck
         super().__init__(nick)
 
 
@@ -31,7 +31,7 @@ class Player(User):
             print('All cards were given!')
 
 
-    def report_marriage(self):
+    def report_marriage(self) -> None:
         """Method that checks if player has got marriage in its deck and possibly report that"""
         if {('clover', 'queen'): 12} in self.deck:
             if {('clover', 'king'): 13} in self.deck:
@@ -60,7 +60,7 @@ class Player(User):
 
 
     @classmethod
-    def player_creator(cls, suit, figures, nick):
+    def player_creator(cls, suit: list[str], figures: list[str], nick: str) -> list['Player', 'Player']:
         """Method that creates two players and returns decks for each of them
 
         Parameters
@@ -77,8 +77,8 @@ class Player(User):
         list
             a list which have ready decks (shuffled) for both player which take part into the game
         """
-        dict_all_cards = {}
-        all_cards_list = []
+        dict_all_cards: dict[tuple[str, str], int] = {}
+        all_cards_list: list[dict[tuple[str, str], int]] = []
 
         for s in suit:
             power = (i for i in range(9, 15))
@@ -90,11 +90,11 @@ class Player(User):
 
         shuffle(all_cards_list)
 
-        player_1 = cls(all_cards_list[:12], nick)
-        player_2 = cls(all_cards_list[12:], nick)
+        player_1: Player = cls(all_cards_list[:12], nick)
+        player_2: Player = cls(all_cards_list[12:], nick)
 
         return [player_1, player_2]
 
 
-    ending = staticmethod(lambda: print('Thanks for playing, good game!'))
+    ending: staticmethod = staticmethod(lambda: print('Thanks for playing, good game!'))
     """Method which prints farewell"""
