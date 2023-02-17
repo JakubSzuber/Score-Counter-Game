@@ -1,5 +1,7 @@
 # File for testing an app with GUI
 
+
+
 from time import sleep
 import functions as func
 import users
@@ -7,6 +9,10 @@ import tkinter
 import tkinter.messagebox
 import customtkinter
 from PIL import Image
+import sys
+
+
+
 
 customtkinter.set_appearance_mode("System")  # XXX
 customtkinter.set_default_color_theme("blue")  # XXX
@@ -14,12 +20,6 @@ customtkinter.set_default_color_theme("blue")  # XXX
 pause_img = customtkinter.CTkImage(Image.open('pause.webp'))
 see_logs_img = customtkinter.CTkImage(Image.open('see_logs.png'))
 export_logs_img = customtkinter.CTkImage(Image.open('export_logs.png'), size=(18, 18))
-
-# XXX
-def main_opener():
-    app.destroy()
-    main_win = MainWindow()
-    main_win.mainloop()
 
 
 # XXX
@@ -59,15 +59,23 @@ class MainWindow(customtkinter.CTk):
 
 
         # Output frame
-        self.output_frame = customtkinter.CTkFrame(self, width=140, corner_radius=20)
-        self.output_frame.grid(row=0, column=1, columnspan=4, rowspan=2, sticky="nsew", padx=20, pady=(15, 0))
+        self.textbox = customtkinter.CTkTextbox(self, width=140, corner_radius=20, font=customtkinter.CTkFont(size=40))
+        self.textbox.grid(row=0, column=1, columnspan=4, rowspan=2, sticky="nsew", padx=20, pady=(15, 0))
+        self.textbox.insert("0.0", 'If your\'re ready click Submit')
+        self.textbox.configure(state="disabled")
+
+        # self.output_frame = customtkinter.CTkFrame(self, width=140, corner_radius=20)
+        # self.output_frame.grid(row=0, column=1, columnspan=4, rowspan=2, sticky="nsew", padx=20, pady=(15, 0))
+        #
+        # self.output_label = customtkinter.CTkLabel(master=self.output_frame, text="\nIf your're ready click Submit", font=customtkinter.CTkFont(size=28, weight="bold"))
+        # self.output_label.pack(padx=10, pady=10)
 
 
         # User input and submit button
         self.entry = customtkinter.CTkEntry(self, placeholder_text="Input anwser", font=customtkinter.CTkFont(size=23))  # TODO center cursor
         self.entry.grid(row=2, column=1, columnspan=3, padx=(20, 0), pady=(20, 20), sticky="nsew")
 
-        self.main_button_1 = customtkinter.CTkButton(master=self, fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), text="Submit", hover_color="#20bf7e", font=customtkinter.CTkFont(size=17))
+        self.main_button_1 = customtkinter.CTkButton(master=self, fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), text="Submit", hover_color="#20bf7e", font=customtkinter.CTkFont(size=17), command=user_submit)
         self.main_button_1.grid(row=2, column=4, padx=(20, 20), pady=(20, 20), sticky="nsew")
 
 
@@ -93,6 +101,7 @@ class MainWindow(customtkinter.CTk):
         self.textbox.configure(state="disabled")
         self.scaling_optionemenu.set("100%")
         self.appearance_mode_optionemenu.select()
+
 
     def change_appearance_mode_event(self):  # TODO fix problem with not changing .text
         if self.switch_var.get() == "on":
@@ -149,6 +158,8 @@ class StartWindow(customtkinter.CTk):
         self.start_button = customtkinter.CTkButton(master=self.frame, command=main_opener, width=300, height=55, corner_radius=10, fg_color="green", border_color="#064503", border_width=1, hover_color="#12780e", text="Start the game")
         self.start_button.grid(row=3, column=1, pady=(50, 0))
 
+
+
     # leader_board: list[dict[str, int]] = []  # A list of each user who has finished all minigames
     #
     # while True:
@@ -193,7 +204,89 @@ class StartWindow(customtkinter.CTk):
     #     else:
     #         continue
 
+def main_opener():
+    global counter
+    counter = 0
 
-if __name__ == "__main__":
+    app.destroy()
+    global main_win
+    main_win = MainWindow()
+    main_win.mainloop()
+
+def add_output(new_text: str, new_size: int, line: str):
+    print('Function started..')
+
+    main_win.textbox.configure(state="normal")
+
+    current_text = main_win.textbox.get("0.0", "end")
+    print(f'Current text: {current_text}')
+    main_win.textbox.insert(line, new_text)
+    main_win.textbox.configure(font=customtkinter.CTkFont(size=new_size, weight="bold"))
+    #main_win.textbox.insert(text=current_text+new_text, font=customtkinter.CTkFont(size=new_size, weight="bold"))
+    print(f'Current text: {new_text}')
+
+    main_win.textbox.configure(state="disabled")
+
+
+def clean_output():
+    main_win.textbox.configure(state="normal")
+    main_win.textbox.delete("0.0", "end")
+    main_win.textbox.configure(state="disabled")
+
+
+def user_submit():
+
+    global counter
+    match counter:
+        case 0 | 1:
+            clean_output()
+            welcome(counter)
+        case 2:
+            clean_output()
+            test3()
+        case _:
+            print('nie')
+
+    counter+=1
+
+
+
+
+def welcome(strike: int) -> None:
+    if strike == 0:
+        add_output('Hello user!', 25, "1.0")
+        add_output('\n\n', 25, "2.0")
+        add_output('You will be playing in few games, where you can completing tasks and collecting points. When you end all four minigames you could see leader board and start playing anew. Good luck!', 25, "3.0")
+        add_output('\n\n', 25, "4.0")
+        add_output('Follow the guidelines carefully because if you cause an error you probably will have to play mini-game from the begining!', 25, "5.0")
+        add_output('\n\n', 25, "6.0")
+        add_output('Click submit button to see list of games', 25, "7.0")
+    else:
+        clean_output()
+        add_output('Here is the list of games that you will play sequentially:\n', 25, "1.0")
+        add_output('1 - quizzes about math or python\n', 25, "2.0")
+        add_output('2 - number guessing game\n', 25, "3.0")
+        add_output('3 - russian schnapsen game (card game)\n', 25, "4.0")
+        add_output('4 - color-number memory game\n', 25, "5.0")
+        add_output('-'*72, 25, "6.0")
+        add_output('\n\n', 25, "7.0")
+        add_output('Click submit button to finally start the game!', 25, "8.0")
+
+def test3():
+
+    input_value = main_win.entry.get()
+    print(input_value)
+
+    if input_value == "yes":
+        clean_output()
+        add_output('You are!')
+    else:
+        clean_output()
+        add_output('That\'s not good!')
+
+
+
+if __name__ == '__main__':
+    global app
     app = StartWindow()
     app.mainloop()
