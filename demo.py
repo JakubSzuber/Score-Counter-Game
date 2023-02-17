@@ -11,6 +11,9 @@ from PIL import Image
 customtkinter.set_appearance_mode("System")  # XXX
 customtkinter.set_default_color_theme("blue")  # XXX
 
+pause_img = customtkinter.CTkImage(Image.open('pause.webp'))
+see_logs_img = customtkinter.CTkImage(Image.open('see_logs.png'))
+export_logs_img = customtkinter.CTkImage(Image.open('export_logs.png'), size=(18, 18))
 
 # XXX
 def main_opener():
@@ -28,29 +31,26 @@ class MainWindow(customtkinter.CTk):
         self.geometry(f"{1100}x{580}")
         self.minsize(900, 460)
 
-        # ????configure grid layout (4x4)
+        # Configure grid layout (6x3)
         self.grid_columnconfigure((1, 2, 3, 4), weight=1)
-        #self.grid_columnconfigure((0, 5), weight=0)
         self.grid_rowconfigure((0, 1, 2), weight=1)
-        #self.grid_rowconfigure((0, 5), weight=1)
+
 
         # Sidebar frame with widgets
         self.sidebar_frame = customtkinter.CTkFrame(self, width=140, corner_radius=0)
         self.sidebar_frame.grid(row=0, column=0, rowspan=3, sticky="ns")
 
-
-
         self.logo_label = customtkinter.CTkLabel(self.sidebar_frame, text=" Leader Board", font=customtkinter.CTkFont(size=28, weight="bold"))
         self.logo_label.grid(row=0, column=0, padx=20, pady=(20, 10))
 
-        self.textbox = customtkinter.CTkTextbox(self.sidebar_frame, corner_radius=15, border_width=2, bg_color="#2a2a2a")
+        self.textbox = customtkinter.CTkTextbox(self.sidebar_frame, corner_radius=15, border_width=2)  # TODO make it sticky to ns
         self.textbox.grid(row=1, column=0, pady=10)
 
         self.appearance_mode_label = customtkinter.CTkLabel(self.sidebar_frame, text="Appearance Mode:", anchor="w")
         self.appearance_mode_label.grid(row=2, column=0, padx=20, pady=(10, 0))
         self.switch_var = customtkinter.StringVar(value="on")
         self.appearance_mode_optionemenu = customtkinter.CTkSwitch(self.sidebar_frame, variable=self.switch_var, onvalue="on", offvalue="off", command=self.change_appearance_mode_event, text="Dark")
-        self.appearance_mode_optionemenu.grid(row=3, column=0, padx=20, pady=(5, 25))
+        self.appearance_mode_optionemenu.grid(row=3, column=0, padx=20, pady=(5, 15))
 
         self.scaling_label = customtkinter.CTkLabel(self.sidebar_frame, text="UI Scaling:", anchor="w")
         self.scaling_label.grid(row=4, column=0, padx=20, pady=(10, 0))
@@ -58,35 +58,43 @@ class MainWindow(customtkinter.CTk):
         self.scaling_optionemenu.grid(row=5, column=0, padx=20, pady=(5, 25))
 
 
+        # Output frame
+        self.output_frame = customtkinter.CTkFrame(self, width=140, corner_radius=20)
+        self.output_frame.grid(row=0, column=1, columnspan=4, rowspan=2, sticky="nsew", padx=20, pady=(15, 0))
 
 
+        # User input and submit button
+        self.entry = customtkinter.CTkEntry(self, placeholder_text="Input anwser", font=customtkinter.CTkFont(size=23))  # TODO center cursor
+        self.entry.grid(row=2, column=1, columnspan=3, padx=(20, 0), pady=(20, 20), sticky="nsew")
 
-        # # create main entry and button
-        # self.entry = customtkinter.CTkEntry(self, placeholder_text="CTkEntry")
-        # self.entry.grid(row=3, column=1, columnspan=2, padx=(20, 0), pady=(20, 20), sticky="nsew")
-        #
-        # self.main_button_1 = customtkinter.CTkButton(master=self, fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"))
-        # self.main_button_1.grid(row=3, column=3, padx=(20, 20), pady=(20, 20), sticky="nsew")
-        #
-        # # create radiobutton frame
-        # self.radiobutton_frame = customtkinter.CTkFrame(self)
-        # self.radiobutton_frame.grid(row=0, column=3, padx=(20, 20), pady=(20, 0), sticky="nsew")
-        # self.radio_var = tkinter.IntVar(value=0)
-        # self.label_radio_group = customtkinter.CTkLabel(master=self.radiobutton_frame, text="CTkRadioButton Group:")
-        # self.label_radio_group.grid(row=0, column=2, columnspan=1, padx=10, pady=10, sticky="")
-        # self.radio_button_1 = customtkinter.CTkRadioButton(master=self.radiobutton_frame, variable=self.radio_var, value=0)
-        # self.radio_button_1.grid(row=1, column=2, pady=10, padx=20, sticky="n")
-        # self.radio_button_2 = customtkinter.CTkRadioButton(master=self.radiobutton_frame, variable=self.radio_var, value=1)
-        # self.radio_button_2.grid(row=2, column=2, pady=10, padx=20, sticky="n")
-        # self.radio_button_3 = customtkinter.CTkRadioButton(master=self.radiobutton_frame, variable=self.radio_var, value=2)
-        # self.radio_button_3.grid(row=3, column=2, pady=10, padx=20, sticky="n")
-        #
-        # set default values
+        self.main_button_1 = customtkinter.CTkButton(master=self, fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), text="Submit", hover_color="#20bf7e", font=customtkinter.CTkFont(size=17))
+        self.main_button_1.grid(row=2, column=4, padx=(20, 20), pady=(20, 20), sticky="nsew")
+
+
+        # Options frame
+        self.options_frame = customtkinter.CTkFrame(self, corner_radius=15)
+        self.options_frame.grid(row=0, column=5, rowspan=3, padx=(0, 20), pady=(20, 20), sticky="ns")
+
+        self.radio_var = tkinter.IntVar(value=0)
+        self.label_radio_group = customtkinter.CTkLabel(master=self.options_frame, text="Event Buttons", font=customtkinter.CTkFont(size=20, weight="bold"))
+        self.label_radio_group.grid(row=0, column=2, columnspan=1, padx=10, pady=10, sticky="")
+
+        self.pause_button = customtkinter.CTkButton(master=self.options_frame, text="Pause Game", command=self.pause, image=pause_img)
+        self.pause_button.grid(row=1, column=2, pady=10, padx=20, sticky="n")
+
+        self.see_logs_button = customtkinter.CTkButton(master=self.options_frame, text="See logs", command=self.see_logs, image=see_logs_img)
+        self.see_logs_button.grid(row=2, column=2, pady=10, padx=20, sticky="n")
+
+        self.export_button = customtkinter.CTkButton(master=self.options_frame, text="Export logs", command=self.export_logs, image=export_logs_img)
+        self.export_button.grid(row=3, column=2, pady=10, padx=20, sticky="n")
+
+
+        # Set default values
         self.textbox.configure(state="disabled")
         self.scaling_optionemenu.set("100%")
         self.appearance_mode_optionemenu.select()
 
-    def change_appearance_mode_event(self):
+    def change_appearance_mode_event(self):  # TODO fix problem with not changing .text
         if self.switch_var.get() == "on":
             customtkinter.set_appearance_mode("Dark")
             self.appearance_mode_optionemenu.text="Dark"
@@ -102,6 +110,14 @@ class MainWindow(customtkinter.CTk):
     def sidebar_button_event(self):
         print("sidebar_button click")
 
+    def pause(self):
+        pass
+
+    def see_logs(self):
+        pass
+
+    def export_logs(self):
+        pass
 
 # XXX
 class StartWindow(customtkinter.CTk):
