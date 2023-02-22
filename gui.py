@@ -11,10 +11,10 @@ from typing import TextIO, Generator, Callable
 from random import (sample, choice, randint)
 from string import (digits, ascii_letters)
 from users import User
+import users  # TODO
 from player import Player
 from time import sleep
 import functions as func
-import users
 import tkinter
 import tkinter.messagebox
 import customtkinter
@@ -36,7 +36,7 @@ correct_answers: list[int] = []
 leader_board: list[dict[str | int, int]] = []
 
 # Other global variables
-counter: int = 0
+counter: int = -1
 line_counter: int = 0
 answer_line: str
 quiz_topic: str
@@ -540,38 +540,116 @@ def number_guessing(user_class: User, queue_num: int) -> None:  # TODO just afte
             add_output('\n\n', 25, "9.0")
             add_output('If you read rules you can choose the range of the possible numbers (e.g. 100):', 25, "10.0")
         case 29:
-            choosen_range = main_win.entry.get()
+            choosen_range = int(main_win.entry.get())
             main_win.entry.delete(0, "end")
             assert int(choosen_range) >= 2, 'You chosen to small range of the numbers'
             add_output('Finally we can start game!', 25, "1.0")
             drawn_num = randint(0, int(choosen_range))
         case 30:
             add_output('Guess number: ', 25, "1.0")
+            counter = 30
         case 31:
-            user_trial: int = main_win.entry.get()
+            user_trial: int = int(main_win.entry.get())
             guess_counter += 1
 
-            while user_trial != drawn_num:
+            if user_trial != drawn_num:
                 if user_trial < drawn_num:
-                    add_output('Too small number!\n', 25, "1.0")
+                    main_win.entry.delete(0, "end")
+                    add_output(f'No, {user_trial} is a too small number!\n', 25, "1.0")
                     # user_trial: int = main_win.entry.get()
                     # add_output('Guess number: ', 25, "1.0")
-                    counter = 30
+                    counter = 29
                     guess_counter += 1
                 elif user_trial > drawn_num:
-                    add_output('Too big number!\n', 25, "1.0")
+                    main_win.entry.delete(0, "end")
+                    add_output(f'No, {user_trial} is a too big number!\n', 25, "1.0")
                     # user_trial: int = main_win.entry.get()
                     # add_output('Guess number: ', 25, "1.0")
-                    counter = 30
+                    counter = 29
                     guess_counter += 1
             else:
                 with CmGreenText():
                     earned_points: int = choosen_range//guess_counter*10
                     user_class += earned_points
                     user_class.num_guess_points += earned_points
-                    add_output(f'Congratulations {user_class.nick}, you quess correct after {guess_counter} times!', 25, "1.0")
+                    add_output(f'Congratulations {user_class.nick}, you quess correct after {guess_counter} times!\n', 25, "1.0")
                     add_output(f'You earned {earned_points} points', 25, "2.0")
+                    counter = 31
 
+
+@error_handler
+@minigame_wrapper('russian schnapsen game')
+def russian_schnapsen_game(user_class: User, queue_num: int) -> None:
+    match queue_num:
+        case 32:
+            add_output('-------We can start card game now!-------\n', 25, "1.0")
+            add_output('Below rules of the game:\n', 25, "2.0")
+            add_output('-You will play against computer\n', 25, "3.0")
+            add_output('-Game is absolutely random\n', 25, "4.0")
+            add_output('-You have 12 cards in your deck\n', 25, "5.0")
+            add_output('-If your card have bigger value than your rival\'s card you earn sum of points from both cards in a turn\n', 25, "6.0")
+            add_output('-If you have king and queen from one fit you can get up to 100 points!', 25, "7.0")
+            add_output('\n\n', 25, "8.0")
+            add_output('If you ready click submit button:', 25, "9.0")
+        case 33:
+            suit: list[str] = ['heart', 'tile', 'clover', 'piker']
+            figures: list[str] = ['9', '10', 'jack', 'queen', 'king', 'ace']
+
+            deck_parts: list[Player, Player] = Player.player_creator(suit, figures, user_class.nick)
+            player_01: Player = deck_parts[0]
+            player_02: Player = deck_parts[1]
+
+            player_02.nick = 'Computer'
+
+            player_01.report_marriage()  # TODO change the position of the output text
+            player_02.report_marriage()  # TODO change the position of the output text
+
+            player_01_cards: Generator[dict, None, None] = player_01.card_generator()  # TODO change the position of the output text
+            player_02_cards: Generator[dict, None, None] = player_02.card_generator()  # TODO change the position of the output text
+
+            while True:
+                try:
+                    clean_output()
+                    card_1: dict[str, str] = next(player_01_cards)
+                    card_2: dict[str, str] = next(player_02_cards)
+
+                    add_output(f'{user_class.nick} card: {card_1}\n', 25, "1.0")
+                    add_output(f'Computer card: {card_2}\n', 25, "2.0")
+                    add_output('\n\n', 25, "3.0")
+
+                    card_1_power: int = int(list(card_1.values())[0])
+                    card_2_power: int = int(list(card_2.values())[0])
+
+                    if card_1_power > card_2_power:
+                        with CmGreenText():
+                            add_output(f'{user_class.nick} is winning this turn!', 25, "4.0")
+                        sleep(2)  # todo NOTE: if you give this line to context manager then the text will be green but some part of the text won't show
+                        player_01 += card_1_power+card_2_power
+                        player_01.card_points += card_1_power + card_2_power
+                    elif card_1_power == card_2_power:
+                        player_01 += card_1_power+card_2_power
+                        player_01.card_points += card_1_power + card_2_power
+                        player_02 += card_1_power+card_2_power
+                        player_02.card_points += card_1_power + card_2_power
+                        add_output('Draw!', 25, "4.0")
+                        sleep(2)  # todo NOTE: if you give this line to context manager then the text will be green but some part of the text won't show
+                    else:
+                        with CmRedText():
+                            add_output(f'{player_02.nick} is winning this turn!', 25, "4.0")
+                        sleep(2)
+                        player_02 += card_1_power+card_2_power
+                        player_02.card_points += card_1_power + card_2_power
+                except StopIteration:
+                    clean_output()
+                    add_output(f'{player_01.nick}, you\'ve earn {player_01.card_points} points\n', 25, "1.0")
+                    add_output(f'Computer, earn {player_02.card_points} points\n', 25, "2.0")
+                    add_output(f'Winner is: {player_01.nick}!!!\n' if player_01.card_points > player_02.card_points else f'Winner is: computer!\n', 25, "3.0")
+                    add_output('Computer: ', 25, "4.0")
+                    player_02.ending()
+                    break
+
+            user_class += player_01.all_points
+            user_class.card_points += player_01.all_points
 
 
 # --------------------- Other functions ---------------------
@@ -599,13 +677,16 @@ def clean_output():
 def user_submit():
     global counter
     match counter:
-        case 0 | 1:
+        case -1 | 0:
+            counter += 1
             clean_output()
             welcome(counter)
-        case 2 | 3:
+        case 1 | 2:
+            counter += 1
             clean_output()
             sign_in_window(leader_board, counter)
-        case 4:
+        case 3:
+            counter += 1
             clean_output()
             add_output('Your nick and time of starting playing will be saved into file (and your every activity in this game)', 25, "1.0")
             add_output('\n\n', 25, "2.0")
@@ -613,16 +694,22 @@ def user_submit():
             global current_user
             with cm_sign_in_window(current_user:= sign_in_window(leader_board, counter)):  # Create instance of the class User and use context manager at one time
                 pass
-        case i if i in range(5, 28):
+            counter = 31  # TODO this line skip the program to the russian_schnapsen_game (in order to test it)
+        case i if i in range(4, 27):
+            counter += 1
             clean_output()
             quiz_initializer(current_user, counter)
-        case 28 | 29 | 30:
+        case 27 | 28 | 29 | 30:
+            counter += 1
             clean_output()
             number_guessing(current_user, counter)
+        case 31 | 32:
+            counter += 1
+            clean_output()
+            russian_schnapsen_game(current_user, counter)
         case _:
             print('nie')
 
-    counter+=1
 
 
 # def test3():
