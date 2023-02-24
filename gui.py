@@ -180,7 +180,7 @@ class MainWindow(customtkinter.CTk):
         pass
 
 
-
+main_win: MainWindow
 
 # XXX
 class StartWindow(customtkinter.CTk):
@@ -521,7 +521,7 @@ def quiz_body(us_cl: User, f: TextIO, quiz_type: str, queue_num: int) -> None:  
 
 @error_handler
 @minigame_wrapper('number guessing')
-def number_guessing(user_class: User, queue_num: int) -> None:  # TODO just after the try make: "counter = 30" oraz w 635 linii mozesz zmienic z inkrementacja counter bedzie sie ofbywac na koncu kazdej funckji
+def number_guessing(user_class: User, queue_num: int) -> None:
     global counter
     global choosen_range
     global drawn_num
@@ -600,60 +600,167 @@ def russian_schnapsen_game(user_class: User, queue_num: int) -> None:
             player_02: Player = deck_parts[1]
 
             player_02.nick = 'Computer'
+            clean_output()
+            player_01.report_marriage()
+            player_02.report_marriage()
 
-            player_01.report_marriage()  # TODO change the position of the output text
-            player_02.report_marriage()  # TODO change the position of the output text
+            player_01_cards: Generator[dict, None, None] = player_01.card_generator()
+            player_02_cards: Generator[dict, None, None] = player_02.card_generator()
 
-            player_01_cards: Generator[dict, None, None] = player_01.card_generator()  # TODO change the position of the output text
-            player_02_cards: Generator[dict, None, None] = player_02.card_generator()  # TODO change the position of the output text
+            for i in range(7):
+                clean_output()
+                card_1: dict[str, str] = next(player_01_cards)
+                card_2: dict[str, str] = next(player_02_cards)
 
-            while True:
-                try:
-                    clean_output()
-                    card_1: dict[str, str] = next(player_01_cards)
-                    card_2: dict[str, str] = next(player_02_cards)
+                add_output(f'{user_class.nick} card: {card_1}\n', 25, "1.0")
+                add_output(f'Computer card: {card_2}\n', 25, "2.0")
+                add_output('\n\n', 25, "3.0")
 
-                    add_output(f'{user_class.nick} card: {card_1}\n', 25, "1.0")
-                    add_output(f'Computer card: {card_2}\n', 25, "2.0")
-                    add_output('\n\n', 25, "3.0")
+                card_1_power: int = int(list(card_1.values())[0])
+                card_2_power: int = int(list(card_2.values())[0])
 
-                    card_1_power: int = int(list(card_1.values())[0])
-                    card_2_power: int = int(list(card_2.values())[0])
-
-                    if card_1_power > card_2_power:
-                        with CmGreenText():
-                            add_output(f'{user_class.nick} is winning this turn!', 25, "4.0")
-                        sleep(2)  # todo NOTE: if you give this line to context manager then the text will be green but some part of the text won't show
-                        player_01 += card_1_power+card_2_power
-                        player_01.card_points += card_1_power + card_2_power
-                    elif card_1_power == card_2_power:
-                        player_01 += card_1_power+card_2_power
-                        player_01.card_points += card_1_power + card_2_power
-                        player_02 += card_1_power+card_2_power
-                        player_02.card_points += card_1_power + card_2_power
-                        add_output('Draw!', 25, "4.0")
-                        sleep(2)  # todo NOTE: if you give this line to context manager then the text will be green but some part of the text won't show
-                    else:
-                        with CmRedText():
-                            add_output(f'{player_02.nick} is winning this turn!', 25, "4.0")
+                if card_1_power > card_2_power:
+                    add_output(f'{user_class.nick} is winning this turn!', 25, "4.0")
+                    with CmGreenText():
                         sleep(2)
-                        player_02 += card_1_power+card_2_power
-                        player_02.card_points += card_1_power + card_2_power
-                except StopIteration:
-                    clean_output()
-                    add_output(f'{player_01.nick}, you\'ve earn {player_01.card_points} points\n', 25, "1.0")
-                    add_output(f'Computer, earn {player_02.card_points} points\n', 25, "2.0")
-                    add_output(f'Winner is: {player_01.nick}!!!\n' if player_01.card_points > player_02.card_points else f'Winner is: computer!\n', 25, "3.0")
-                    add_output('Computer: ', 25, "4.0")
-                    player_02.ending()
-                    break
+                    player_01 += card_1_power+card_2_power
+                    player_01.card_points += card_1_power + card_2_power
+
+                elif card_1_power == card_2_power:
+                    player_01 += card_1_power+card_2_power
+                    player_01.card_points += card_1_power + card_2_power
+                    player_02 += card_1_power+card_2_power
+                    player_02.card_points += card_1_power + card_2_power
+
+                    add_output('Draw!', 25, "4.0")
+                    sleep(2)
+                else:
+                    add_output(f'{player_02.nick} is winning this turn!', 25, "4.0")
+                    with CmRedText():
+                        sleep(2)
+                    player_02 += card_1_power+card_2_power
+                    player_02.card_points += card_1_power + card_2_power
+            else:
+                try:
+                    for i in range(5):
+                        clean_output()
+                        add_output(f'{player_01.nick}, you\'ve earn {player_01.card_points} points\n', 25, "1.0")
+                        add_output(f'Computer, earn {player_02.card_points} points\n', 25, "2.0")
+                        add_output(f'Winner is: {player_01.nick}!!!\n' if player_01.card_points > player_02.card_points else f'Winner is: computer!\n', 25, "3.0")
+                        add_output('\n\n', 25, "4.0")
+                        player_02.ending()
+                except NameError:
+                    add_output('Computer: Thanks for playing, good game!', 25, "5.0")
 
             user_class += player_01.all_points
             user_class.card_points += player_01.all_points
 
 
+@error_handler
+@minigame_wrapper('memory game')
+def memory_game(user_class: User, queue_num: int) -> None:
+    match queue_num:
+        case 34:
+            add_output('We can start memory game now!\n', 25, "1.0")
+            add_output('Below rules of the first part of game:\n', 25, "2.0")
+            add_output('-You will see number for 2 second and then you have to enter it correct\n', 25, "3.0")
+            add_output('-The amount of the digits in the number will be increasing\n', 25, "4.0")
+            add_output('-If you make a mistake the first part of the game will end\n', 25, "5.0")
+            add_output('-You can earn more points from the bigger numbers!\n', 25, "6.0")
+            add_output('-Your answer should be correct to example pattern: 35\n', 25, "7.0")
+            add_output('\n\n', 25, "8.0")
+            add_output('If you\'re ready click submit button:', 25, "9.0")
+        case 35:
+            add_output('Finally we can start game!')
+            sleep(2)
+
+            iterator: int = 100
+            while True:
+                add_output('Number:', secret_num := randint(iterator, iterator*2), 25, "1.0")
+                sleep(3)
+
+                users_trial: int = int(input('Enter number: '))
+
+                if users_trial == secret_num:
+                    add_output(f'Correct answer! You get {iterator//20} points!', 25, "1.0")
+                    user_class.all_points += iterator//20
+                    user_class.memory_points += iterator//20
+                    sleep(2)
+                else:
+                    add_output('Sorry bad answer! First part of game is over!', 25, "1.0")
+                    sleep(2)
+                    break
+
+                iterator *= 10
+
+
+    print('Below rules of the second part of game:')
+    print('-You will se random password in the random color for 2 seconds, after that you have to enter it and its color')
+    print('-The length of the password will be increasing')
+    print('-For guessing the password correctly you get 100 points for guessing the color 50')
+    print('-Possible color answers: pink, red, blue, green')
+    print('-If you make a mistake the game will end')
+
+    input('If you\'re ready enter anything: ')
+    print('Finally we can start game!')
+    sleep(2)
+
+    colors: list[str] = ['red', 'green', 'blue', 'pink']
+    chars_num: list[str] = list(chain(digits, ascii_letters))
+    counter: int = 2
+
+    while True:
+        if counter == 60:
+            print('Incredible score! You\'ve got maximum points from part two!')
+            break
+
+        gen_password: list[str] = sample(chars_num, counter)
+        gen_color: str = choice(colors)
+
+        combination: list[int] = [0, 0, 0]
+
+        match gen_color:
+            case 'red':
+                combination = [255, 0, 0]
+            case 'green':
+                combination = [0, 255, 0]
+            case 'blue':
+                combination = [30, 144, 255]
+            case 'pink':
+                combination = [255, 0, 255]
+
+        print(''.join(gen_password), r=combination[0],  g=combination[1], b=combination[2])
+        sleep(3)
+
+        user_password_answer: str = input('Enter password: ')
+        assert user_password_answer != '', 'Password must contains characters'
+
+        if ''.join(gen_password) == user_password_answer:
+            print('Correct answer you\'re getting points!')
+            user_class += 100
+            user_class.memory_points += 100
+        else:
+            print('Sorry bad answer! Second part of game is over!')
+            sleep(3)
+            break
+
+        user_color_answer = input('Enter the color of the password: ')
+        if gen_color == user_color_answer:
+            print('Correct answer you\'re getting points!')
+            sleep(2)
+            user_class.all_points += 50
+            user_class.memory_points += 50
+        else:
+            print('Sorry bad answer! Second part of game is over!')
+            break
+
+        counter += 1
+
+
 # --------------------- Other functions ---------------------
 def add_output(new_text: str, new_size: int, line: str):
+    global main_win
+
     print('Function started..')
 
     main_win.textbox.configure(state="normal")
@@ -694,7 +801,7 @@ def user_submit():
             global current_user
             with cm_sign_in_window(current_user:= sign_in_window(leader_board, counter)):  # Create instance of the class User and use context manager at one time
                 pass
-            counter = 31  # TODO this line skip the program to the russian_schnapsen_game (in order to test it)
+            counter = 33  # TODO this line skip the program to the memory_game (in order to test it)
         case i if i in range(4, 27):
             counter += 1
             clean_output()
@@ -704,6 +811,10 @@ def user_submit():
             clean_output()
             number_guessing(current_user, counter)
         case 31 | 32:
+            counter += 1
+            clean_output()
+            russian_schnapsen_game(current_user, counter)
+        case 33:
             counter += 1
             clean_output()
             russian_schnapsen_game(current_user, counter)
